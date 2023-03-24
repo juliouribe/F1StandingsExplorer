@@ -12,8 +12,15 @@
 </head>
 
 <body>
-    <nav class="py-6 px-6 flex justify-between items-center border-b border-stone-900 bg-red-600">
-        <a href="/" class="text-xl font-semibold text-slate-50">F1 Standings Explorer</a>
+
+    <nav class="py-6 px-6 flex border-b justify-start border-black bg-black">
+        <div class="">
+            {% load static %}
+            <img class="h-20 w-54" src="{% static 'core/f1_logo3.png' %}" alt="F1 Logo" />
+        </div>
+        <div class="flex items-center">
+            <h1 class="mx-8 text-7xl font-semibold text-red-700">F1 Standings Explorer</h1>
+        </div>
     </nav>
 
     <div class="px-6 py-6">
@@ -21,7 +28,7 @@
         {% endblock %}
     </div>
 
-    <footer class="py-6 px-6 flex justify-between bg-gray-800">
+    <footer class="py-6 px-6 flex justify-between bg-black">
         <div class="w-2/3 pr-10">
             <h3 class="mb-5 font-semibold text-gray-400">Disclaimer</h3>
 
