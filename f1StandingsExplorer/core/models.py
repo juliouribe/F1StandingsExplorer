@@ -1,4 +1,3 @@
-from tabnanny import verbose
 from django.db import models
 
 
@@ -11,3 +10,15 @@ class Constructor(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class RaceTrack(models.Model):
+    circuit_name = models.CharField(max_length=255)
+    country = models.CharField(max_length=255)
+    country_abbreviation = models.CharField(max_length=3)
+
+    class Meta:
+        ordering = ('country', 'circuit_name',)
+
+    def __str__(self):
+        return self.country + ', ' + self.circuit_name
