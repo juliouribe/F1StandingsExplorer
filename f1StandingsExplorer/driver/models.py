@@ -6,7 +6,7 @@ class Driver(models.Model):
     last_name = models.CharField(max_length=255)
 
     class Meta:
-        ordering = ('last_name',)
+        ordering = ('first_name',)
 
     def __str__(self):
         return self.first_name + ' ' + self.last_name
