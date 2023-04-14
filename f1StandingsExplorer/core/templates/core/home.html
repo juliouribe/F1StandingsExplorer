@@ -6,21 +6,31 @@
 <div>
     <h3 class="flex justify-center items-center text-gray-500">Query Filters</h3>
     <br>
-    <br>
-    <br>
-    <br>
-    <br>
+</div>
+<div class="flex justify-center items-center">
+    <table class="border-collapse border border-black text-base text-left text-white">
+        <thead class="text-base text-white bg-black">
+            <tr>
+                {% for header in headers %}
+                <th scope="col" class="px-2 py-2 border border-black">{{ header }}</th>
+                {% endfor %}
+            </tr>
+        </thead>
+        <tbody>
+            {% for driver_results in race_results %}
+            <tr class="text-black bg-white border-b">
+                {% for result in driver_results %}
+                <td class="px-2 py-2 border border-black">{{ result }}</td>
+                {% endfor %}
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 </div>
 <div>
-    <h3 class="flex justify-center items-center text-gray-500">Table Placeholder</h3>
-    <div>race_result.as_table</div>
-</div>
-<div>
+    <br>
+    <br>
     <h3 class="flex justify-center items-center text-gray-500">Graph Visual</h3>
-    <br>
-    <br>
-    <br>
-    <br>
     <br>
 </div>
 {% endblock %}
