@@ -24,14 +24,9 @@ def home(request):
     for driver in drivers:
         driver_name = driver['first_name'] + ' ' + driver['last_name']
         driver_results = RaceResult.objects.filter(driver__id=driver['id']).values_list(
-            'points', flat=True).order_by('grand_prix__race_date')
+            'position', flat=True).order_by('grand_prix__race_date')
         driver_row = [str(place)] + [driver_name] + \
             list(driver_results) + [driver['total_points']]
-        # TODO: Find a way to fill missing values. Vettel and Hulk subs
-        if len(driver_row) < len(headers):
-            # Super hacky but fills in some missing 0's.
-            for i in range(len(headers) - len(driver_row)):
-                driver_row.append('0')
         race_results.append(driver_row)
         place += 1
 
