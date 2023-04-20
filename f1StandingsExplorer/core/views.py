@@ -1,9 +1,10 @@
 from django.db.models import Sum
-from django.db.models.expressions import F
+from django.forms.formsets import formset_factory
 from django.shortcuts import render
 from core.models import GrandPrix, RaceResult
 from driver.models import Driver
 from .forms import NewRaceResults
+from .constants import POINTS_MAP
 
 
 def home(request):
@@ -48,10 +49,20 @@ def add_race_results(request):
             # race_result.grand_prix = top_level_gp
             # race_result.save()
     else:
-        form = NewRaceResults()
+        # Replace with a better way to select
+        shared_grand_prix = GrandPrix.objects.all()[0]
+
+        NewRaceResultsFormSet = formset_factory(NewRaceResults,
+                                                max_num=len(POINTS_MAP))
+        formset = NewRaceResultsFormSet(
+            initial=[
+                {'grand_prix': shared_grand_prix,
+                 'position': pos} for pos in list(POINTS_MAP.keys())
+            ]
+        )
 
     context = {
         'title': 'Add New Race Results',
-        'form': form
+        'formset': formset
     }
     return render(request, 'core/add_race_results.html', context)

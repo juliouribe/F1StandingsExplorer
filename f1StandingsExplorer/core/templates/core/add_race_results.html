@@ -8,6 +8,7 @@
 <form method="post" action="." enctype="multipart/form-data">
     {% csrf_token %}
 
+    {% for form in formset %}
     <div class="space-y-4">
         {{ form }}
     </div>
@@ -21,6 +22,7 @@
         {{ form.non_fields_errors }}
     </div>
     {% endif %}
+    {% endfor %}
 
     <button class="mt-6 py-4 px-8 text-lg bg-black hover:bg-gray-900 rounded-xl text-white">Submit</button>
 </form>
