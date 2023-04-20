@@ -1,6 +1,7 @@
 from django.db.models import Sum
 from django.forms.formsets import formset_factory
 from django.shortcuts import redirect, render
+from django.urls import reverse
 from core.models import GrandPrix, RaceResult
 from driver.models import Driver
 from .forms import NewRaceResultsForm
@@ -9,7 +10,9 @@ from .constants import POINTS_MAP
 
 def home(request):
     headers = ['Place'] + ['Driver'] + list(GrandPrix.objects.filter(
-        race_date__year=2022).values_list('race_track__country_abbreviation', flat=True))
+        race_date__year=2022).order_by('race_date').values_list(
+            'race_track__country_abbreviation', flat=True))
+
     headers.append('Points')
     # .values() essentially does the group by.
     results = RaceResult.objects.filter(
@@ -51,7 +54,8 @@ def add_race_results(request):
             for form in formset:
                 if form.is_valid:
                     form.save()
-            return redirect(request, 'core/home.html', {'title': 'Redirected'})
+            # Send to homepage via url name so we don't append to existing url.
+            return redirect(reverse('core:home'))
     else:
         formset = NewRaceResultsFormSet(
             initial=[
