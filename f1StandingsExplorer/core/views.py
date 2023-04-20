@@ -3,6 +3,7 @@ from django.db.models.expressions import F
 from django.shortcuts import render
 from core.models import GrandPrix, RaceResult
 from driver.models import Driver
+from .forms import NewRaceResults
 
 
 def home(request):
@@ -36,3 +37,21 @@ def home(request):
     }
 
     return render(request, 'core/home.html', context)
+
+
+def add_race_results(request):
+    if request.method == 'POST':
+        form = NewRaceResults(request.POST)
+
+        if form.is_valid:
+            race_result = form.save(commit=False)
+            # race_result.grand_prix = top_level_gp
+            # race_result.save()
+    else:
+        form = NewRaceResults()
+
+    context = {
+        'title': 'Add New Race Results',
+        'form': form
+    }
+    return render(request, 'core/add_race_results.html', context)
