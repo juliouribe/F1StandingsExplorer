@@ -10,7 +10,7 @@ YES_NO_BOOLEAN_CHOICES = [
 ]
 
 
-class NewRaceResults(forms.ModelForm):
+class NewRaceResultsForm(forms.ModelForm):
     class Meta:
         model = RaceResult
         fields = ('grand_prix', 'position', 'driver', 'constructor',

@@ -1,9 +1,9 @@
 from django.db.models import Sum
 from django.forms.formsets import formset_factory
-from django.shortcuts import render
+from django.shortcuts import redirect, render
 from core.models import GrandPrix, RaceResult
 from driver.models import Driver
-from .forms import NewRaceResults
+from .forms import NewRaceResultsForm
 from .constants import POINTS_MAP
 
 
@@ -41,23 +41,22 @@ def home(request):
 
 
 def add_race_results(request):
+    # Replace with a better way to select
+    shared_grand_prix = GrandPrix.objects.all()[0]
+    NewRaceResultsFormSet = formset_factory(NewRaceResultsForm,
+                                            max_num=len(POINTS_MAP))
     if request.method == 'POST':
-        form = NewRaceResults(request.POST)
-
-        if form.is_valid:
-            race_result = form.save(commit=False)
-            # race_result.grand_prix = top_level_gp
-            # race_result.save()
+        formset = NewRaceResultsFormSet(request.POST, request.FILES)
+        if formset.is_valid():
+            for form in formset:
+                if form.is_valid:
+                    form.save()
+            return redirect(request, 'core/home.html', {'title': 'Redirected'})
     else:
-        # Replace with a better way to select
-        shared_grand_prix = GrandPrix.objects.all()[0]
-
-        NewRaceResultsFormSet = formset_factory(NewRaceResults,
-                                                max_num=len(POINTS_MAP))
         formset = NewRaceResultsFormSet(
             initial=[
                 {'grand_prix': shared_grand_prix,
-                 'position': pos} for pos in list(POINTS_MAP.keys())
+                    'position': pos} for pos in list(POINTS_MAP.keys())
             ]
         )
 

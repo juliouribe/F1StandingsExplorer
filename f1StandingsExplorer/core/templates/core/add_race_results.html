@@ -6,6 +6,8 @@
 <h1 class="mb-6 text-3xl">{{ title }}</h1>
 
 <form method="post" action="." enctype="multipart/form-data">
+    {{ formset.management_form }}
+
     {% csrf_token %}
 
     {% for form in formset %}
