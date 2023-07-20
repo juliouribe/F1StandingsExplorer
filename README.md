@@ -47,16 +47,14 @@ The x-axis will represent the laps for the specific race. The y-axis will repres
 ### Overall Layout with Placeholders
 ![Overall Layout](./F1SELayout.png "Overall Layout")
 
+### F1 Wiki Plain Totals
+![Wiki Season Summary](./f1-wiki.png "Wiki Season Summary")
 
 ### Example of Season Summary Graph
 ![Season Summary](./line-graph.png "Season Summary")
 
-
 ### Example of Race Summary Graph
 ![Race Summary](./lap-by-lap.jpeg "Race Summary")
-
-
-
 
 ## Technologies, Libraries, APIs
 I will be getting data from the [Ergast API](http://ergast.com/mrd/). The guidelines for using the API include no more than 4 requests per second (avoid spam) or 200 times per hour. It doesn't seem like I need my own API key.
