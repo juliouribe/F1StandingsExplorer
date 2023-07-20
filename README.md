@@ -44,9 +44,18 @@ Users will be able to click on a given race from the main page that will pull up
 The x-axis will represent the laps for the specific race. The y-axis will represent the grid positions in a static manner. First will be at the top, then second, all the way down to 20th. The line graphs will follow a driver as they move up and down positions over the course of the race. Pit stops and drivers overtaking will be visible on this graph as positions shift.
 
 ## Mock Up
+### Overall Layout with Placeholders
 ![Overall Layout](./F1SELayout.png "Overall Layout")
+
+
+### Example of Season Summary Graph
 ![Season Summary](./line-graph.png "Season Summary")
+
+
+### Example of Race Summary Graph
 ![Race Summary](./lap-by-lap.jpeg "Race Summary")
+
+
 
 
 ## Technologies, Libraries, APIs
