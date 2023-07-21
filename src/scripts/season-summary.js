@@ -1,31 +1,34 @@
-// Functions for parsing the results of an entire season
-const season = 2021
-const url = `http://ergast.com/api/f1/${season}/results.json?limit=500`
-let results;
-let fileData;
+// Functions for processing data related to the Season Summary Main View.
 
-export const fetchSeasonResults = () => {
-  fetch(url, { headers: { "Accept": "application/json" } })
-    .then(res => {
-      if (res.ok) {
-        return res.json();
-      } else {
-        throw new Error('Something went wrong');
-      }
-    }, fail => console.log(fail))
-    .then(body => {
-      results = body;
-    }, fail => console.log(fail)) // if this failure wasn't here, then we'd go to the catch if the if(res.ok) portion failed
-    .catch(error => console.log(error))
+export async function fetchSeasonResults(season=2021) {
+  const url = `http://ergast.com/api/f1/${season}/results.json?limit=500`
+  let result;
+  try {
+    const response = await fetch(
+      url, { headers: { "Accept": "application/json" } }
+    )
+    if (response.ok) {
+      result = await response.json();
+    }
+  } catch (errorResponse) {
+    console.error(errorResponse);
+  }
+  return result;
 }
 
-export const loadResultsJson = () => {
-  fetch('./src/data/results-2021.json', { mode: 'no-cors' })
-    .then((response) => response.json())
-    .then((json) => {
-      console.log(json);
-      fileData = json;
-    });
+export async function loadResultsJson() {
+  let result;
+  try {
+    const response = await fetch('./src/data/results-2021.json')
+    if (response.ok) {
+      result = await response.json();
+    } else {
+      throw response;
+    }
+  } catch (errorResponse) {
+    console.error(errorResponse);
+  }
+  return result;
 }
 
 export function parseSeasonResults(response) {
@@ -36,21 +39,27 @@ export function parseSeasonResults(response) {
   drivers into an array sorted from highest to lowest. Race order is preserved.
 
   response: JSON object
-  seasonSummary: an array containing sub-arrays of driver results. Each subarray
-    contains a hash object. The keys are the races and values are points. An
-    additional key is added for points total.
+  seasonResults: an array containing sub-arrays of driver results. Each subarray
+    contains the name of the driver, and a hash object. The hash object contains
+    race results for points, quali position, and finish position.
   */
   // This returns an array of races.
+  console.log(response);
   const races = response.MRData.RaceTable.Races;
   const drivers = {};
   races.forEach((race) => {
     const raceName = race.raceName;
     const round = race.round;
-    race.forEach((raceResult) => {
-      const driver = raceResult.driverId
+    race.Results.forEach((raceResult) => {
+      const driver = raceResult.Driver.driverId
       // Create default entries if they don't exist.
       if (!drivers[driver]) drivers[driver] = {};
       if (!drivers[driver]["pointsTotal"]) drivers[driver]["pointsTotal"] = 0;
+      if (!drivers[driver]["fullName"]) {
+        const first = raceResult.Driver.givenName;
+        const last = raceResult.Driver.familyName;
+        drivers[driver]["fullName"] = `${first} ${last}`;
+      }
       // We'll use finish and quali in the driver detail view.
       drivers[driver][round] = {
         "raceName": raceName,
@@ -58,7 +67,7 @@ export function parseSeasonResults(response) {
         "finishPosition": raceResult.position,
         "qualiPosition": raceResult.grid
       }
-      drivers[driver]["pointsTotal"] += raceResult.points;
+      drivers[driver]["pointsTotal"] += parseInt(raceResult.points);
     })
   })
   // Sort drivers by total points. Returns an array with 2 element subarrays.
@@ -66,5 +75,6 @@ export function parseSeasonResults(response) {
   // driver results. Each round is a key for the full race result.
   const seasonResults = Object.entries(drivers)
     .sort(([, a], [, b]) => b.pointsTotal - a.pointsTotal);
+
   return seasonResults;
 }
