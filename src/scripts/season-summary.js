@@ -1,14 +1,10 @@
 // Functions for parsing the results of an entire season
-
 const season = 2021
 const url = `http://ergast.com/api/f1/${season}/results.json?limit=500`
 let results;
+let fileData;
 
-const raceAbbreviations = {
-
-}
-
-const fetchSeasonResults = () => {
+export const fetchSeasonResults = () => {
   fetch(url, { headers: { "Accept": "application/json" } })
     .then(res => {
       if (res.ok) {
@@ -23,7 +19,16 @@ const fetchSeasonResults = () => {
     .catch(error => console.log(error))
 }
 
-function parseSeasonResults(response) {
+export const loadResultsJson = () => {
+  fetch('./src/data/results-2021.json', { mode: 'no-cors' })
+    .then((response) => response.json())
+    .then((json) => {
+      console.log(json);
+      fileData = json;
+    });
+}
+
+export function parseSeasonResults(response) {
   /*
   Takes in the result of calling the full seasons results endpoint. Parses the
   body into an array that can be used to generate the season summary table.
