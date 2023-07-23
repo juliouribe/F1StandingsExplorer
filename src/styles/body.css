@@ -1,0 +1,19 @@
+/* Why can't I use flex here for the graph? */
+body {
+  background: white;
+}
+
+.body-main {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 20px 0px;
+}
+
+.graph-container {
+  width: 1200px;
+  height: 500px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
