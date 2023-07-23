@@ -22,7 +22,7 @@ const data = [
 ]
 Chart.register(autocolors);
 const chart = new Chart(ctx, {
-  type: 'bar',
+  type: 'line',
   data: {
     labels: sortedDrivers.map((subarray) => subarray[0]),
     datasets: [
