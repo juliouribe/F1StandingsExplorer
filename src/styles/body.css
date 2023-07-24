@@ -10,7 +10,7 @@ body {
   justify-content: center;
   margin: 20px 0px;
 }
-
+/* Styling Line Graph */
 .graph-container {
   width: 1200px;
   height: 500px;
@@ -18,9 +18,16 @@ body {
   align-items: center;
   justify-content: center;
 }
-
-.points-table {
+/* Styling the results table */
+.table-container {
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.results-table {
+  background-color: #f8f9fa;
+  color: #202122;
+  margin: 1em 0;
+  border: 1px solid #a2a9b1;
 }

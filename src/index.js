@@ -15,5 +15,5 @@ seasonSummaryTable.generateSeasonSummary(sortedDrivers, seasonDataset, ctx)
 
 // Create Positions Table
 const table = seasonSummaryTable.generateTable(sortedDrivers);
-const pointsTable = document.querySelector(".points-table");
+const pointsTable = document.querySelector(".table-container");
 pointsTable.appendChild(table);

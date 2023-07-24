@@ -6,6 +6,7 @@ import { getRelativePosition } from 'chart.js/helpers';
 
 export function generateTable(sortedDrivers) {
   const table = document.createElement("table");
+  const thead = document.createElement("thead");
   const header = document.createElement("tr");
   const driverColumn = document.createElement("th");
   driverColumn.innerHTML = "Driver";
@@ -24,10 +25,11 @@ export function generateTable(sortedDrivers) {
     }
     header.appendChild(column);
   })
-  table.appendChild(header)
-  console.log(table)
+  thead.appendChild(header)
+  table.appendChild(thead)
   // Generate driver rows.
   // Top level iterates over drivers (Y-Axis)
+  const tbody = document.createElement("tbody");
   sortedDrivers.forEach((driver) => {
     const driverStats = driver[1];
     const row = document.createElement("tr");
@@ -46,10 +48,11 @@ export function generateTable(sortedDrivers) {
     const total = document.createElement("td");
     total.innerHTML = driverStats.pointsTotal;
     row.appendChild(total)
-    table.appendChild(row);
+    tbody.appendChild(row);
   })
+  table.appendChild(tbody);
+  table.classList.add("results-table");
   return table;
-
 }
 
 export function generateSeasonSummary(sortedDrivers, seasonDataset, ctx) {
