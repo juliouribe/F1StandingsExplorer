@@ -39,7 +39,7 @@ body {
   border: 1px solid #a2a9b1;
 }
 
-.results-table > thead > tr > th {
+.results-table>thead>tr>th {
   padding: 3px;
 }
 
@@ -59,7 +59,7 @@ body {
 }
 
 #gold-cell {
-  background-color: goldenrod;
+  background-color: gold;
 }
 
 #silver-cell {
@@ -67,7 +67,7 @@ body {
 }
 
 #bronze-cell {
-  background-color: rgb(165, 121, 9);
+  background-color: goldenrod;
 }
 
 #no-points-cell {
