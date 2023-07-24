@@ -38,6 +38,9 @@ export function generateTable(sortedDrivers) {
       }
       row.appendChild(raceResult);
     }
+    const total = document.createElement("td");
+    total.innerHTML = driverStats.pointsTotal;
+    row.appendChild(total)
     table.appendChild(row);
   })
   return table;
