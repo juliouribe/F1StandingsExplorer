@@ -91,4 +91,5 @@ export function generateSeasonSummary(sortedDrivers, seasonDataset, ctx) {
       },
     }
   });
+  return chart;
 }
