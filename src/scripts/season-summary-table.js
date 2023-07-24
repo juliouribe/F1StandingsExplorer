@@ -1,4 +1,7 @@
 // Functions for creating the points table for season summary view.
+import Chart from 'chart.js/auto'
+import { getRelativePosition } from 'chart.js/helpers';
+// import autocolors from 'chartjs-plugin-autocolors';
 
 export function generateTable(sortedDrivers) {
   const table = document.createElement("table");
@@ -47,4 +50,20 @@ export function generateTable(sortedDrivers) {
 
 }
 
-
+export function generateSeasonSummary(sortedDrivers, seasonDataset, ctx) {
+  // Chart.register(autocolors);
+  const chart = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: Object.values(sortedDrivers[0][1]).map((stats) => stats.raceName),
+      datasets: seasonDataset
+    },
+    options: {
+      onClick: (e) => {
+        const canvasPosition = getRelativePosition(e, chart);
+        const dataX = chart.scales.x.getValueForPixel(canvasPosition.x);
+        const dataY = chart.scales.y.getValueForPixel(canvasPosition.y);
+      },
+    }
+  });
+}

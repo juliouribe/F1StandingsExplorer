@@ -77,3 +77,15 @@ export function parseSeasonResults(response) {
 
   return seasonResults;
 }
+
+export function generateDatasets(sortedDrivers) {
+  const seasonDataset = [];
+  sortedDrivers.forEach((driver) => {
+    const driverData = {
+      label: driver[0].split(' ')[1].slice(0, 3).toUpperCase(),
+      data: Object.values(driver[1]).map((stats) => stats.currentPoints)
+    }
+    seasonDataset.push(driverData);
+  });
+  return seasonDataset;
+}
