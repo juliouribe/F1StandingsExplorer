@@ -1,6 +1,6 @@
 // Functions for processing data related to the Season Summary Main View.
 
-export async function fetchSeasonResults(season=2021) {
+export async function fetchSeasonResults(season = 2021) {
   const url = `http://ergast.com/api/f1/${season}/results.json?limit=500`
   let result;
   try {
@@ -51,23 +51,22 @@ export function parseSeasonResults(response) {
     const raceName = race.raceName;
     const round = race.round;
     race.Results.forEach((raceResult) => {
-      const driver = raceResult.Driver.driverId
+      const first = raceResult.Driver.givenName;
+      const last = raceResult.Driver.familyName;
+      const driver = `${first} ${last}`
+
       // Create default entries if they don't exist.
       if (!drivers[driver]) drivers[driver] = {};
       if (!drivers[driver]["pointsTotal"]) drivers[driver]["pointsTotal"] = 0;
-      if (!drivers[driver]["fullName"]) {
-        const first = raceResult.Driver.givenName;
-        const last = raceResult.Driver.familyName;
-        drivers[driver]["fullName"] = `${first} ${last}`;
-      }
       // We'll use finish and quali in the driver detail view.
+      drivers[driver]["pointsTotal"] += parseInt(raceResult.points);
       drivers[driver][round] = {
         "raceName": raceName,
         "points": raceResult.points,
         "finishPosition": raceResult.position,
-        "qualiPosition": raceResult.grid
+        "qualiPosition": raceResult.grid,
+        "currentPoints": drivers[driver]["pointsTotal"]
       }
-      drivers[driver]["pointsTotal"] += parseInt(raceResult.points);
     })
   })
   // Sort drivers by total points. Returns an array with 2 element subarrays.
