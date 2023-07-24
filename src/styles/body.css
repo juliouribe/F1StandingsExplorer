@@ -17,3 +17,9 @@ body {
   align-items: center;
   justify-content: center;
 }
+
+.points-table {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

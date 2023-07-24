@@ -9,13 +9,9 @@ const jsonData = await seasonSummary.loadResultsJson();
 const sortedDrivers = seasonSummary.parseSeasonResults(jsonData);
 console.log(sortedDrivers)
 
-// sortedDrivers.forEach((driver) => {
-//   console.log(`${driver[0]}, ${driver[1].pointsTotal}`);
-// })
-
 const table = seasonSummaryTable.generateTable(sortedDrivers);
-const body = document.getElement("body");
-body.appendChild(table);
+const pointsTable = document.querySelector(".points-table");
+pointsTable.appendChild(table);
 
 
 // const canvas = document.getElementById("graph-canvas")
