@@ -2,7 +2,8 @@ import * as seasonSummary from './scripts/season-summary';
 import * as seasonSummaryTable from './scripts/season-summary-table'
 
 // Parse race data
-const jsonData = await seasonSummary.loadResultsJson();
+let season = 2022;
+const jsonData = await seasonSummary.loadResultsJson(season);
 const sortedDrivers = await seasonSummary.parseSeasonResults(jsonData);
 console.log(sortedDrivers)
 

@@ -16,10 +16,10 @@ export async function fetchSeasonResults(season = 2021) {
   return result;
 }
 
-export async function loadResultsJson() {
+export async function loadResultsJson(season = 2021) {
   let result;
   try {
-    const response = await fetch('./src/data/results-2021.json')
+    const response = await fetch(`./src/data/results-${season}.json`)
     if (response.ok) {
       result = await response.json();
     } else {
