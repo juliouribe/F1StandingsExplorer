@@ -8,6 +8,9 @@ export function generateTable(sortedDrivers) {
   const table = document.createElement("table");
   const thead = document.createElement("thead");
   const header = document.createElement("tr");
+  const position = document.createElement("th");
+  position.innerHTML = "Pos.";
+  header.appendChild(position);
   const driverColumn = document.createElement("th");
   driverColumn.innerHTML = "Driver";
   header.appendChild(driverColumn);
@@ -30,18 +33,34 @@ export function generateTable(sortedDrivers) {
   // Generate driver rows.
   // Top level iterates over drivers (Y-Axis)
   const tbody = document.createElement("tbody");
-  sortedDrivers.forEach((driver) => {
+  sortedDrivers.forEach((driver, pos) => {
     const driverStats = driver[1];
     const row = document.createElement("tr");
+    const driverPos = document.createElement("th")
+    driverPos.innerHTML = (pos + 1).toString();
+    row.appendChild(driverPos);
     const driverName = document.createElement("td");
     driverName.innerHTML = driver[0];
     row.appendChild(driverName);
     // Inner loop iterates over race results (X-Axis).
     for (let i = 1; i <= numRaces; i++) {
       const raceResult = document.createElement("td");
+      raceResult.classList.add("data-cell")
       // Cell will be empty if a driver didn't participate in a given round.
       if (i in driverStats) {
-        raceResult.innerHTML = driverStats[i]["finishPosition"];
+        const finishPos = driverStats[i]["finishPosition"];
+        raceResult.innerHTML = finishPos;
+        if (finishPos === "1") {
+          raceResult.setAttribute("id", "gold-cell");
+        } else if (finishPos === "2") {
+          raceResult.setAttribute("id", "silver-cell");
+        } else if (finishPos === "3") {
+          raceResult.setAttribute("id", "bronze-cell");
+        } else if (finishPos <= 10) {
+          raceResult.setAttribute("id", "points-cell");
+        } else {
+          raceResult.setAttribute("id", "no-points-cell");
+        }
       }
       row.appendChild(raceResult);
     }
