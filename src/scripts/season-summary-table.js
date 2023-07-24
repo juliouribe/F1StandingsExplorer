@@ -1,4 +1,5 @@
-// Functions for creating the points table for season summary view.
+// Functions for creating graphs for the season summary view.
+import * as constants from './constants';
 import Chart from 'chart.js/auto'
 import { getRelativePosition } from 'chart.js/helpers';
 // import autocolors from 'chartjs-plugin-autocolors';
@@ -6,16 +7,17 @@ import { getRelativePosition } from 'chart.js/helpers';
 export function generateTable(sortedDrivers) {
   const table = document.createElement("table");
   const header = document.createElement("tr");
-  const empty = document.createElement("th");
-  header.appendChild(empty);
+  const driverColumn = document.createElement("th");
+  driverColumn.innerHTML = "Driver";
+  header.appendChild(driverColumn);
   // Generate headers.
   const firstDriver = sortedDrivers[0][1]
-  let numRaces = 0;
   // Figure out how many races there are, i.e. don't include Total column.
-  Object.keys(firstDriver).forEach((el) => {
+  let numRaces = 0;
+  Object.values(firstDriver).forEach((ele) => {
     const column = document.createElement("th");
-    if (el !== "pointsTotal") {
-      column.innerHTML = el.toString();
+    if (typeof ele === "object") {
+      column.innerHTML = constants.grandPrixAbbreviations[ele.raceName];
       numRaces++;
     } else {
       column.innerHTML = "Total"

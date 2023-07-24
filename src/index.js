@@ -9,7 +9,7 @@ console.log(sortedDrivers)
 const canvas = document.getElementById("graph-canvas")
 const ctx = canvas.getContext("2d");
 
-// Create Season Summary Linegraphs
+// Create Season Summary Line-graphs
 const seasonDataset = seasonSummary.generateDatasets(sortedDrivers);
 seasonSummaryTable.generateSeasonSummary(sortedDrivers, seasonDataset, ctx)
 
