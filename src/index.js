@@ -12,14 +12,12 @@ sortedDrivers.forEach((driver) => {
   console.log(`${driver[0]}, ${driver[1].pointsTotal}`);
 })
 
+
+
+
 const canvas = document.getElementById("graph-canvas")
 const ctx = canvas.getContext("2d");
 
-const data = [
-  { year: 2010, count: 2 },
-  { year: 2011, count: 5 },
-  { year: 2012, count: 12 }
-]
 Chart.register(autocolors);
 const chart = new Chart(ctx, {
   type: 'line',
