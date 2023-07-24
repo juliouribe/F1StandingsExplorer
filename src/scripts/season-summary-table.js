@@ -64,7 +64,7 @@ export function generateTable(sortedDrivers) {
       }
       row.appendChild(raceResult);
     }
-    const total = document.createElement("td");
+    const total = document.createElement("th");
     total.innerHTML = driverStats.pointsTotal;
     row.appendChild(total)
     tbody.appendChild(row);
@@ -79,7 +79,8 @@ export function generateSeasonSummary(sortedDrivers, seasonDataset, ctx) {
   const chart = new Chart(ctx, {
     type: 'line',
     data: {
-      labels: Object.values(sortedDrivers[0][1]).map((stats) => stats.raceName),
+      labels: Object.values(sortedDrivers[0][1])
+        .map((stats) => constants.grandPrixAbbreviations[stats.raceName]),
       datasets: seasonDataset
     },
     options: {
