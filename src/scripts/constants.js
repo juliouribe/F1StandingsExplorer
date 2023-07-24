@@ -1,5 +1,5 @@
 export const grandPrixAbbreviations = {
-  "Bahrain Grand Prix" : "BHR",
+  "Bahrain Grand Prix": "BHR",
   "Emilia Romagna Grand Prix": "EMI",
   "Portuguese Grand Prix": "POR",
   "Spanish Grand Prix": "ESP",
@@ -21,5 +21,10 @@ export const grandPrixAbbreviations = {
   "Qatar Grand Prix": "QAT",
   "Saudi Arabian Grand Prix": "SAU",
   "Abu Dhabi Grand Prix": "ABU",
-  // Australia, Miami, Canada, Las Vegas, China and a few others are missing
+  "Australian Grand Prix": "AUS",
+  "Miami Grand Prix": "MIA",
+  "Canadian Grand Prix": "CAN",
+  "Singapore Grand Prix": "SIN",
+  "Japanese Grand Prix": "JPN",
+  "Brazilian Grand Prix": "SAP",
 }
