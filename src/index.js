@@ -6,12 +6,18 @@ let chart;
 
 async function populatePage(season = 2021, startDate = "", endDate = "") {
   // Parse race data
-  let jsonData
-  if (constants.localFileSeasons.includes(parseInt(season))) {
-    jsonData = await seasonSummary.loadResultsJson(season);
-  } else {
-    jsonData = await seasonSummary.fetchSeasonResults(season);
+  let jsonData = JSON.parse(localStorage.getItem(season));
+  // If we're not using cached data, get from local file or fetching from API.
+  if (jsonData === null) {
+    console.log("looking up data")
+    if (constants.localFileSeasons.includes(parseInt(season))) {
+      jsonData = await seasonSummary.loadResultsJson(season);
+    } else {
+      jsonData = await seasonSummary.fetchSeasonResults(season);
+    }
+    localStorage.setItem(season, JSON.stringify(jsonData));
   }
+  // Organize data into drivers from highest to lowest points.
   const sortedDrivers = seasonSummary.parseSeasonResults(
     jsonData, startDate, endDate
   );
@@ -41,7 +47,7 @@ async function populatePage(season = 2021, startDate = "", endDate = "") {
 const changeSeasonRefresh = e => {
   e.preventDefault();
   let season = document.getElementById("season").value
-  // when you change season don't pass in start/end date.
+  // When you change season don't pass in start/end date.
   populatePage(season);
 }
 
