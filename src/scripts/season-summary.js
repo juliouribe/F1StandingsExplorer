@@ -31,7 +31,7 @@ export async function loadResultsJson(season = 2022) {
   return result;
 }
 
-export function parseSeasonResults(response) {
+export function parseSeasonResults(response, startDate, endDate) {
   /*
   Takes in the result of calling the full seasons results endpoint. Parses the
   body into an array that can be used to generate the season summary table.
@@ -44,11 +44,14 @@ export function parseSeasonResults(response) {
     race results for points, quali position, and finish position.
   */
   // This returns an array of races.
-  console.log(response);
   const races = response.MRData.RaceTable.Races;
   const drivers = {};
   races.forEach((race) => {
     const raceName = race.raceName;
+    // Insert filtering for date
+    const raceDate = race.date; // "2021-03-28"
+    // startDate // mm-dd-yyyy
+
     const round = race.round;
     race.Results.forEach((raceResult) => {
       const first = raceResult.Driver.givenName;

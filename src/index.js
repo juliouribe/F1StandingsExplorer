@@ -4,11 +4,13 @@ import * as seasonSummaryTable from './scripts/season-summary-table'
 let chart;
 
 async function populatePage() {
-  let seasonOption = document.getElementById("season")
-  let season = seasonOption.value;
+  let season = document.getElementById("season").value
+  let startDate = document.getElementById("start-date");
+  let endDate = document.getElementById("end-date").value;
+
   // Parse race data
   const jsonData = await seasonSummary.loadResultsJson(season);
-  const sortedDrivers = await seasonSummary.parseSeasonResults(jsonData);
+  const sortedDrivers = seasonSummary.parseSeasonResults(jsonData, startDate, endDate);
   console.log(sortedDrivers)
 
   // Create Season Summary Line-graphs
@@ -34,4 +36,7 @@ const repopulatePage = e => {
 
 populatePage();
 const filtersForm = document.querySelector(".data-filters");
+const seasonSelection = document.querySelector("#season");
+
 filtersForm.addEventListener("submit", repopulatePage);
+seasonSelection.addEventListener("change", repopulatePage)
