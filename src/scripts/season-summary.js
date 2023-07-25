@@ -51,11 +51,11 @@ export function parseSeasonResults(response, startDate, endDate) {
     const raceName = race.raceName;
     // Insert filtering for date
     const raceDate = new Date(race.date);
-    if (startDate){
+    if (startDate) {
       const startFilter = new Date(startDate);
       const endFilter = new Date(endDate);
 
-      if (raceDate.getYear() === startFilter.getYear()) {
+      if (raceDate.getFullYear() === startFilter.getFullYear()) {
         if (raceDate < startFilter || raceDate > endFilter) {
           return;
         }
@@ -127,4 +127,21 @@ export function createStartEndDropdown(response) {
     startDate.appendChild(optionStart);
     endDate.appendChild(optionEnd);
   })
+}
+
+export function createSeasonSelectDropdown() {
+  // Populate season select dropdown.
+  const seasonOptions = document.getElementById("season")
+  const today = new Date()
+  const currentYear = today.getFullYear();
+  for (let i = 0; i < constants.numberOfSeasons; i++) {
+    const seasonOption = document.createElement("option");
+    const year = parseInt(currentYear - i);
+    seasonOption.innerHTML = year;
+    seasonOption.setAttribute("value", year);
+    if (year === 2021) {
+      seasonOption.setAttribute("selected", true);
+    }
+    seasonOptions.appendChild(seasonOption);
+  }
 }

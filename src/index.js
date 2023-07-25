@@ -54,6 +54,7 @@ const repopulatePage = e => {
 }
 
 populatePage();
+seasonSummary.createSeasonSelectDropdown();
 const filtersForm = document.querySelector(".data-filters");
 const seasonSelection = document.querySelector("#season");
 

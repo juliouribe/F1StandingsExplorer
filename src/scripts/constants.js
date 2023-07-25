@@ -30,3 +30,5 @@ export const grandPrixAbbreviations = {
 }
 
 export const localFileSeasons = [2021, 2022];
+
+export const numberOfSeasons = 10;
