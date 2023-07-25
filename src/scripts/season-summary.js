@@ -1,4 +1,5 @@
 // Functions for processing data related to the Season Summary Main View.
+import * as constants from './constants';
 
 export async function fetchSeasonResults(season = 2021) {
   const url = `http://ergast.com/api/f1/${season}/results.json?limit=500`
@@ -68,7 +69,8 @@ export function parseSeasonResults(response, startDate, endDate) {
         "points": raceResult.points,
         "finishPosition": raceResult.position,
         "qualiPosition": raceResult.grid,
-        "currentPoints": drivers[driver]["pointsTotal"]
+        "currentPoints": drivers[driver]["pointsTotal"],
+        "date": race.date
       }
     })
   })
@@ -91,4 +93,25 @@ export function generateDatasets(sortedDrivers) {
     seasonDataset.push(driverData);
   });
   return seasonDataset;
+}
+
+export function createStartEndDropdown(sortedDrivers) {
+  const startDate = document.getElementById("start-date");
+  const endDate = document.getElementById("end-date");
+  console.log(startDate);
+  console.log(endDate);
+  const firstRow = sortedDrivers[0][1];
+  Object.values(firstRow).forEach((ele) => {
+    const optionStart = document.createElement("option");
+    const optionEnd = document.createElement("option");
+    if (typeof ele === "object") {
+      const raceName = constants.grandPrixAbbreviations[ele.raceName];
+      optionStart.innerHTML = `${raceName} - ${ele.date}`;
+      optionStart.setAttribute("value", ele.date)
+      optionEnd.innerHTML = `${raceName} - ${ele.date}`;
+      optionEnd.setAttribute("value", ele.date)
+    }
+    startDate.appendChild(optionStart);
+    endDate.appendChild(optionEnd);
+  })
 }

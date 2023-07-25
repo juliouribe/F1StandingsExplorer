@@ -13,6 +13,9 @@ async function populatePage() {
   const sortedDrivers = seasonSummary.parseSeasonResults(jsonData, startDate, endDate);
   console.log(sortedDrivers)
 
+  // Update start/end date dropdowns.
+  seasonSummary.createStartEndDropdown(sortedDrivers);
+
   // Create Season Summary Line-graphs
   const canvas = document.getElementById("graph-canvas")
   const ctx = canvas.getContext("2d");
