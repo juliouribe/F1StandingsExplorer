@@ -10,7 +10,7 @@ async function populatePage(season = 2021, startDate = "", endDate = "") {
   if (constants.localFileSeasons.includes(parseInt(season))) {
     jsonData = await seasonSummary.loadResultsJson(season);
   } else {
-    // jsonData = await seasonSummary.fetchSeasonResults(season);
+    jsonData = await seasonSummary.fetchSeasonResults(season);
   }
   const sortedDrivers = seasonSummary.parseSeasonResults(
     jsonData, startDate, endDate
