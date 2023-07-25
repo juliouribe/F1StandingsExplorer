@@ -34,9 +34,6 @@ export function generateTable(sortedDrivers) {
   // Top level iterates over drivers (Y-Axis)
   const tbody = document.createElement("tbody");
   const roundStart = parseInt(Object.keys(sortedDrivers[0][1])[0])
-  console.log(`ROUND START ${roundStart}`)
-  console.log(`NUM races ${numRaces}`)
-  console.log(numRaces + roundStart)
   sortedDrivers.forEach((driver, pos) => {
     const driverStats = driver[1];
     const row = document.createElement("tr");
@@ -45,6 +42,7 @@ export function generateTable(sortedDrivers) {
     row.appendChild(driverPos);
     const driverName = document.createElement("td");
     driverName.innerHTML = driver[0];
+    driverName.classList.add("driver-name");
     row.appendChild(driverName);
     // Inner loop iterates over race results (X-Axis).
     for (let i = roundStart; i < (numRaces + roundStart); i++) {
