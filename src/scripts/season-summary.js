@@ -17,7 +17,7 @@ export async function fetchSeasonResults(season = 2021) {
   return result;
 }
 
-export async function loadResultsJson(season = 2022) {
+export async function loadResultsJson(season = 2021) {
   let result;
   try {
     const response = await fetch(`./src/data/results-${season}.json`)
@@ -98,8 +98,14 @@ export function generateDatasets(sortedDrivers) {
 export function createStartEndDropdown(sortedDrivers) {
   const startDate = document.getElementById("start-date");
   const endDate = document.getElementById("end-date");
-  console.log(startDate);
-  console.log(endDate);
+  // Clear out previous dropdown options.
+  while (startDate.firstChild) {
+    startDate.removeChild(startDate.firstChild)
+  }
+  while (endDate.firstChild) {
+    endDate.removeChild(endDate.firstChild)
+  }
+  // Populate options with dates from current year.
   const firstRow = sortedDrivers[0][1];
   Object.values(firstRow).forEach((ele) => {
     const optionStart = document.createElement("option");

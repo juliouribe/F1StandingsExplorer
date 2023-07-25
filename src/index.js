@@ -5,12 +5,14 @@ let chart;
 
 async function populatePage() {
   let season = document.getElementById("season").value
-  let startDate = document.getElementById("start-date");
-  let endDate = document.getElementById("end-date").value;
+  let inputStartDate = document.getElementById("start-date").value;
+  let inputEndDate = document.getElementById("end-date").value;
 
   // Parse race data
   const jsonData = await seasonSummary.loadResultsJson(season);
-  const sortedDrivers = seasonSummary.parseSeasonResults(jsonData, startDate, endDate);
+  const sortedDrivers = seasonSummary.parseSeasonResults(
+    jsonData, inputStartDate, inputEndDate
+  );
   console.log(sortedDrivers)
 
   // Update start/end date dropdowns.
@@ -23,7 +25,9 @@ async function populatePage() {
   if (chart) {
     chart.destroy()
   }
-  chart = seasonSummaryTable.generateSeasonSummary(sortedDrivers, seasonDataset, ctx)
+  chart = seasonSummaryTable.generateSeasonSummary(
+    sortedDrivers, seasonDataset, ctx
+  )
 
   // Create Positions Table
   const table = seasonSummaryTable.generateTable(sortedDrivers);

@@ -50,6 +50,7 @@ export function generateTable(sortedDrivers) {
       if (i in driverStats) {
         const finishPos = driverStats[i]["finishPosition"];
         raceResult.innerHTML = finishPos;
+        // Add color to background depending on finish.
         if (finishPos === "1") {
           raceResult.setAttribute("id", "gold-cell");
         } else if (finishPos === "2") {
