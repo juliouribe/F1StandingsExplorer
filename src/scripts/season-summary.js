@@ -51,12 +51,14 @@ export function parseSeasonResults(response, startDate, endDate) {
     const raceName = race.raceName;
     // Insert filtering for date
     const raceDate = new Date(race.date);
-    const startFilter = new Date(startDate);
-    const endFilter = new Date(endDate);
+    if (startDate){
+      const startFilter = new Date(startDate);
+      const endFilter = new Date(endDate);
 
-    if (raceDate.getYear() === startFilter.getYear()) {
-      if (raceDate < startFilter || raceDate > endFilter) {
-        return;
+      if (raceDate.getYear() === startFilter.getYear()) {
+        if (raceDate < startFilter || raceDate > endFilter) {
+          return;
+        }
       }
     }
 

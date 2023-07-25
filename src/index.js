@@ -1,19 +1,19 @@
+import * as constants from './scripts/constants';
 import * as seasonSummary from './scripts/season-summary';
 import * as seasonSummaryTable from './scripts/season-summary-table'
 
 let chart;
 
-async function populatePage() {
-  let season = document.getElementById("season").value
-  let inputStartDate = document.getElementById("start-date").value;
-  let inputEndDate = document.getElementById("end-date").value;
-  console.log(inputStartDate)
-  console.log(inputEndDate)
-
+async function populatePage(season = 2021, startDate = "", endDate = "") {
   // Parse race data
-  const jsonData = await seasonSummary.loadResultsJson(season);
+  let jsonData
+  if (constants.localFileSeasons.includes(parseInt(season))) {
+    jsonData = await seasonSummary.loadResultsJson(season);
+  } else {
+    // jsonData = await seasonSummary.fetchSeasonResults(season);
+  }
   const sortedDrivers = seasonSummary.parseSeasonResults(
-    jsonData, inputStartDate, inputEndDate
+    jsonData, startDate, endDate
   );
   console.log(sortedDrivers)
 
@@ -38,9 +38,19 @@ async function populatePage() {
   pointsTable.appendChild(table);
 }
 
+const changeSeasonRefresh = e => {
+  e.preventDefault();
+  let season = document.getElementById("season").value
+  // when you change season don't pass in start/end date.
+  populatePage(season);
+}
+
 const repopulatePage = e => {
   e.preventDefault();
-  populatePage();
+  let season = document.getElementById("season").value
+  let inputStartDate = document.getElementById("start-date").value;
+  let inputEndDate = document.getElementById("end-date").value;
+  populatePage(season, inputStartDate, inputEndDate);
 }
 
 populatePage();
@@ -48,4 +58,4 @@ const filtersForm = document.querySelector(".data-filters");
 const seasonSelection = document.querySelector("#season");
 
 filtersForm.addEventListener("submit", repopulatePage);
-seasonSelection.addEventListener("change", repopulatePage)
+seasonSelection.addEventListener("change", changeSeasonRefresh)

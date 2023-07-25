@@ -28,3 +28,5 @@ export const grandPrixAbbreviations = {
   "Japanese Grand Prix": "JPN",
   "Brazilian Grand Prix": "SAP",
 }
+
+export const localFileSeasons = [2021, 2022];
