@@ -7,6 +7,8 @@ async function populatePage() {
   let season = document.getElementById("season").value
   let inputStartDate = document.getElementById("start-date").value;
   let inputEndDate = document.getElementById("end-date").value;
+  console.log(inputStartDate)
+  console.log(inputEndDate)
 
   // Parse race data
   const jsonData = await seasonSummary.loadResultsJson(season);
@@ -16,7 +18,7 @@ async function populatePage() {
   console.log(sortedDrivers)
 
   // Update start/end date dropdowns.
-  seasonSummary.createStartEndDropdown(sortedDrivers);
+  seasonSummary.createStartEndDropdown(jsonData);
 
   // Create Season Summary Line-graphs
   const canvas = document.getElementById("graph-canvas")

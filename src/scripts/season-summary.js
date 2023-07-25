@@ -50,8 +50,15 @@ export function parseSeasonResults(response, startDate, endDate) {
   races.forEach((race) => {
     const raceName = race.raceName;
     // Insert filtering for date
-    const raceDate = race.date; // "2021-03-28"
-    // startDate // mm-dd-yyyy
+    const raceDate = new Date(race.date);
+    const startFilter = new Date(startDate);
+    const endFilter = new Date(endDate);
+
+    if (raceDate.getYear() === startFilter.getYear()) {
+      if (raceDate < startFilter || raceDate > endFilter) {
+        return;
+      }
+    }
 
     const round = race.round;
     race.Results.forEach((raceResult) => {
@@ -95,7 +102,7 @@ export function generateDatasets(sortedDrivers) {
   return seasonDataset;
 }
 
-export function createStartEndDropdown(sortedDrivers) {
+export function createStartEndDropdown(response) {
   const startDate = document.getElementById("start-date");
   const endDate = document.getElementById("end-date");
   // Clear out previous dropdown options.
@@ -106,17 +113,15 @@ export function createStartEndDropdown(sortedDrivers) {
     endDate.removeChild(endDate.firstChild)
   }
   // Populate options with dates from current year.
-  const firstRow = sortedDrivers[0][1];
-  Object.values(firstRow).forEach((ele) => {
+  const races = response.MRData.RaceTable.Races;
+  races.forEach((race) => {
     const optionStart = document.createElement("option");
     const optionEnd = document.createElement("option");
-    if (typeof ele === "object") {
-      const raceName = constants.grandPrixAbbreviations[ele.raceName];
-      optionStart.innerHTML = `${raceName} - ${ele.date}`;
-      optionStart.setAttribute("value", ele.date)
-      optionEnd.innerHTML = `${raceName} - ${ele.date}`;
-      optionEnd.setAttribute("value", ele.date)
-    }
+    const shortName = constants.grandPrixAbbreviations[race.raceName];
+    optionStart.innerHTML = `${shortName} - ${race.date}`;
+    optionStart.setAttribute("value", race.date)
+    optionEnd.innerHTML = `${shortName} - ${race.date}`;
+    optionEnd.setAttribute("value", race.date)
     startDate.appendChild(optionStart);
     endDate.appendChild(optionEnd);
   })
