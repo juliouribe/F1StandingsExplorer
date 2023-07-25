@@ -33,6 +33,10 @@ export function generateTable(sortedDrivers) {
   // Generate driver rows.
   // Top level iterates over drivers (Y-Axis)
   const tbody = document.createElement("tbody");
+  const roundStart = parseInt(Object.keys(sortedDrivers[0][1])[0])
+  console.log(`ROUND START ${roundStart}`)
+  console.log(`NUM races ${numRaces}`)
+  console.log(numRaces + roundStart)
   sortedDrivers.forEach((driver, pos) => {
     const driverStats = driver[1];
     const row = document.createElement("tr");
@@ -43,7 +47,7 @@ export function generateTable(sortedDrivers) {
     driverName.innerHTML = driver[0];
     row.appendChild(driverName);
     // Inner loop iterates over race results (X-Axis).
-    for (let i = 1; i <= numRaces; i++) {
+    for (let i = roundStart; i < (numRaces + roundStart); i++) {
       const raceResult = document.createElement("td");
       raceResult.classList.add("data-cell")
       // Cell will be empty if a driver didn't participate in a given round.
