@@ -10,4 +10,12 @@ export class StateManager {
     this.driverView = false;
     this.driverNum = null;
   }
+
+  championshipToggle(toggleStatus) {
+    if (toggleStatus) {
+      this.championship = constants.championship.constructors;
+    } else {
+      this.championship = constants.championship.drivers;
+    };
+  }
 }

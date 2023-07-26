@@ -16,9 +16,9 @@ const championship = document.querySelector("#championship");
 
 const changeSeasonRefresh = e => {
   let season = document.getElementById("season").value
-  let constructors = document.querySelector('#constructor').checked;
+  pageManager.championshipToggle(document.querySelector('#constructor').checked)
   // When you change season don't pass in start/end date.
-  populatePage(season, "", "", constructors);
+  populatePage(season, "", "");
 }
 
 const repopulatePage = e => {
@@ -27,7 +27,7 @@ const repopulatePage = e => {
   let season = document.getElementById("season").value
   let inputStartDate = document.getElementById("start-date").value;
   let inputEndDate = document.getElementById("end-date").value;
-  let constructors = document.querySelector('#constructor').checked;
+  pageManager.championshipToggle(document.querySelector('#constructor').checked)
   // Driver num is not enough. Order of drivers changes depending on how you filter
   // Figure out a way to pass the driver name or something and filter on that.
   // if (driverView) {
@@ -40,13 +40,12 @@ const repopulatePage = e => {
 
 const championshipToggle = e => {
   let season = document.getElementById("season").value
-  let constructors = document.querySelector('#constructor').checked;
-  populatePage(season, "", "", constructors);
+  pageManager.championshipToggle(document.querySelector('#constructor').checked)
+  populatePage(season, "", "");
 }
 
 const handleDriverClick = (e, legendItem, _) => {
   let season = document.getElementById("season").value
-  let constructors = document.querySelector('#constructor').checked;
   let inputStartDate = document.getElementById("start-date").value;
   let inputEndDate = document.getElementById("end-date").value;
   if (inputStartDate === inputEndDate) {
@@ -55,7 +54,7 @@ const handleDriverClick = (e, legendItem, _) => {
   }
   driverNum = legendItem.datasetIndex;
   driverView = true;
-  populatePage(season, inputStartDate, inputEndDate, constructors, driverNum);
+  populatePage(season, inputStartDate, inputEndDate, driverNum);
 }
 
 const backToMain = e => {
@@ -64,15 +63,14 @@ const backToMain = e => {
   let season = document.getElementById("season").value
   let inputStartDate = document.getElementById("start-date").value;
   let inputEndDate = document.getElementById("end-date").value;
-  let constructors = document.querySelector('#constructor').checked;
   if (inputStartDate === inputEndDate) {
     inputStartDate = "";
     inputEndDate = "";
   }
-  populatePage(season, inputStartDate, inputEndDate, constructors);
+  populatePage(season, inputStartDate, inputEndDate);
 }
 
-async function populatePage(season = 2021, startDate = "", endDate = "", constructors = false, driverDetail = null) {
+async function populatePage(season = 2021, startDate = "", endDate = "", driverDetail = null) {
   // Load and parse race data from local file or API.
   let jsonData = JSON.parse(localStorage.getItem(season));
   // If we're not using cached data, get from local file or fetching from API.
@@ -102,7 +100,7 @@ async function populatePage(season = 2021, startDate = "", endDate = "", constru
   if (driverDetail != null) {
     const singleDriver = [sortedDrivers[driverDetail]];
     StateManager.currentChart = chartFunctions.renderDriverDetail(singleDriver, raceLabels, ctx, backToMain)
-  } else if (constructors) {
+  } else if (pageManager.championship === constants.championship.constructors) {
     StateManager.currentChart = chartFunctions.renderConstructorsTable(jsonData, startDate, endDate, season, raceLabels, ctx);
   } else {
     StateManager.currentChart = chartFunctions.renderDriversTable(sortedDrivers, season, raceLabels, ctx, handleDriverClick);
