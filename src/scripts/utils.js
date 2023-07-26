@@ -17,11 +17,12 @@ export function getRaceLabels(sortedDrivers) {
 export function populateElement(type, text, parent = null, eleClass = null) {
   /*
   Takes in an element, populates the text, and optionally appends it to a parent
-  element and adds a class if given.
+  element and adds a class if given. Returns the newElement.
 
   */
   const newElement = document.createElement(type);
   newElement.innerHTML = text;
   if (parent != null) parent.appendChild(newElement);
   if (eleClass) newElement.classList.add(eleClass);
+  return newElement;
 }

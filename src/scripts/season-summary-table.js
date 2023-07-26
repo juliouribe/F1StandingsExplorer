@@ -5,31 +5,22 @@ import Chart from 'chart.js/auto';
 import { getRelativePosition } from 'chart.js/helpers';
 // import autocolors from 'chartjs-plugin-autocolors';
 
-export function generateTable(sortedDrivers) {
+export function generateTable(sortedDrivers, raceLabels) {
   // Setup table layout elements.
   const table = document.createElement("table");
   const thead = document.createElement("thead");
   const header = document.createElement("tr");
-  const position = utils.populateElement("th", "Pos.", header)
-  const driverColumn = document.createElement("th");
-  driverColumn.innerHTML = "Driver";
-  header.appendChild(driverColumn);
+  // Add Position column header.
+  utils.populateElement("th", "Pos.", header)
+  // Add Driver column header.
+  utils.populateElement("th", "Driver", header)
 
-  // Generate headers.
-  const uniqueRaces = new Set();
-  for (let i = 0; i < 3; i++) {
-    Object.values(sortedDrivers[i][1]).forEach((raceResult) => {
-      if (raceResult.raceName) uniqueRaces.add(raceResult.raceName)
-    })
-  }
-  for (const raceName of uniqueRaces) {
-    const column = document.createElement("th");
-    column.innerHTML = constants.grandPrixAbbreviations[raceName];
-    header.appendChild(column);
-  }
-  const column = document.createElement("th");
-  column.innerHTML = "Total"
-  header.appendChild(column);
+  // Add Race abbreviation headers.
+  raceLabels.forEach((raceShortName) => {
+    utils.populateElement("th", raceShortName, header)
+  })
+  // Add Total column header
+  utils.populateElement("th", "Total", header)
   thead.appendChild(header)
   table.appendChild(thead)
 
@@ -40,15 +31,13 @@ export function generateTable(sortedDrivers) {
   sortedDrivers.forEach((driver, pos) => {
     const driverStats = driver[1];
     const row = document.createElement("tr");
-    const driverPos = document.createElement("th")
-    driverPos.innerHTML = (pos + 1).toString();
-    row.appendChild(driverPos);
-    const driverName = document.createElement("td");
-    driverName.innerHTML = driver[0];
-    driverName.classList.add("driver-name");
-    row.appendChild(driverName);
+    // Add position row (1-20).
+    utils.populateElement("th", (pos + 1).toString(), row)
+    // Add driver's name.
+    utils.populateElement("td", driver[0], row, "driver-name")
+
     // Inner loop iterates over race results (X-Axis).
-    for (let i = roundStart; i < (uniqueRaces.size + roundStart); i++) {
+    for (let i = roundStart; i < (raceLabels.length + roundStart); i++) {
       const raceResult = document.createElement("td");
       raceResult.classList.add("data-cell")
       // Cell will be empty if a driver didn't participate in a given round.
@@ -70,9 +59,8 @@ export function generateTable(sortedDrivers) {
       }
       row.appendChild(raceResult);
     }
-    const total = document.createElement("th");
-    total.innerHTML = driverStats.pointsTotal;
-    row.appendChild(total)
+    // Add Total column for given driver.
+    utils.populateElement("th", driverStats.pointsTotal, row)
     tbody.appendChild(row);
   })
   table.appendChild(tbody);

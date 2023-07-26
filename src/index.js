@@ -66,7 +66,7 @@ async function populatePage(season = 2021, startDate = "", endDate = "", constru
   }
 
   // Create Positions Table
-  const table = seasonSummaryTable.generateTable(sortedDrivers);
+  const table = seasonSummaryTable.generateTable(sortedDrivers, raceLabels);
   const pointsTable = document.querySelector(".table-container");
   pointsTable.childNodes.forEach(child => child.remove())
   pointsTable.appendChild(table);
