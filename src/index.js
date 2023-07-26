@@ -9,7 +9,7 @@ async function populatePage(season = 2021, startDate = "", endDate = "") {
   let jsonData = JSON.parse(localStorage.getItem(season));
   // If we're not using cached data, get from local file or fetching from API.
   if (jsonData === null) {
-    console.log("looking up data")
+    console.log("Looking up data")
     if (constants.localFileSeasons.includes(parseInt(season))) {
       jsonData = await seasonSummary.loadResultsJson(season);
     } else {

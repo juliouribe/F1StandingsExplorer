@@ -27,6 +27,14 @@ export const grandPrixAbbreviations = {
   "Singapore Grand Prix": "SIN",
   "Japanese Grand Prix": "JPN",
   "Brazilian Grand Prix": "SAP",
+  "70th Anniversary Grand Prix": "70A",
+  "Tuscan Grand Prix": "TUS",
+  "Eifel Grand Prix": "EIF",
+  "Chinese Grand Prix": "CHN",
+  "German Grand Prix": "GER",
+  "Mexican Grand Prix": "MEX",
+  "Malaysian Grand Prix": "MAL",
+  "European Grand Prix": "EUR",
 }
 
 export const localFileSeasons = [2021, 2022];
