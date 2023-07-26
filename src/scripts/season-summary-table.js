@@ -1,6 +1,7 @@
 // Functions for creating graphs for the season summary view.
 import * as constants from './constants';
-import Chart from 'chart.js/auto'
+import * as utils from './utils';
+import Chart from 'chart.js/auto';
 import { getRelativePosition } from 'chart.js/helpers';
 // import autocolors from 'chartjs-plugin-autocolors';
 
@@ -9,9 +10,7 @@ export function generateTable(sortedDrivers) {
   const table = document.createElement("table");
   const thead = document.createElement("thead");
   const header = document.createElement("tr");
-  const position = document.createElement("th");
-  position.innerHTML = "Pos.";
-  header.appendChild(position);
+  const position = utils.populateElement("th", "Pos.", header)
   const driverColumn = document.createElement("th");
   driverColumn.innerHTML = "Driver";
   header.appendChild(driverColumn);

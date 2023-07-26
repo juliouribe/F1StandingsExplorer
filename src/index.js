@@ -1,13 +1,14 @@
 import * as constants from './scripts/constants';
 import * as seasonSummary from './scripts/season-summary';
 import * as seasonSummaryTable from './scripts/season-summary-table'
+import * as utils from './scripts/utils'
 
 let chart;
 let driverView;
 let driverNum;
 
 async function populatePage(season = 2021, startDate = "", endDate = "", constructors = false, driverDetail = null) {
-  // Parse race data
+  // Load and parse race data from local file or API.
   let jsonData = JSON.parse(localStorage.getItem(season));
   // If we're not using cached data, get from local file or fetching from API.
   if (jsonData === null) {
@@ -26,19 +27,8 @@ async function populatePage(season = 2021, startDate = "", endDate = "", constru
   const sortedDrivers = seasonSummary.parseSeasonResults(
     jsonData, startDate, endDate
   );
+  const raceLabels = utils.getRaceLabels(sortedDrivers);
   console.log(sortedDrivers)
-
-  // Get race labels. A driver may not participate in each race so we iterate
-  // over three of them just to be safe.
-  const uniqueRaces = new Set();
-  for (let i = 0; i < 3; i++) {
-    Object.values(sortedDrivers[i][1]).forEach((raceResult) => {
-      if (raceResult.raceName) {
-        uniqueRaces.add(constants.grandPrixAbbreviations[raceResult.raceName])
-      }
-    })
-  }
-  const raceLabels = Array.from(uniqueRaces);
 
   // Update start/end date dropdowns.
   seasonSummary.createStartEndDropdown(jsonData);
@@ -101,7 +91,7 @@ const repopulatePage = e => {
   // if (driverView) {
   //   populatePage(season, inputStartDate, inputEndDate, constructors, driverNum)
   // } else {
-    // }
+  // }
   // perhaps save what the last submitted dates were in case we jump to driver view
   populatePage(season, inputStartDate, inputEndDate);
 }
