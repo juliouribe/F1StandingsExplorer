@@ -13,6 +13,7 @@ body {
 
 /* Styling Line Graph */
 .graph-container {
+  /* previously 1200px by 500px */
   width: 1200px;
   height: 500px;
   display: flex;

@@ -3,6 +3,8 @@ import * as seasonSummary from './scripts/season-summary';
 import * as seasonSummaryTable from './scripts/season-summary-table'
 
 let chart;
+let driverView;
+let driverNum;
 
 async function populatePage(season = 2021, startDate = "", endDate = "", constructors = false, driverDetail = null) {
   // Parse race data
@@ -26,6 +28,18 @@ async function populatePage(season = 2021, startDate = "", endDate = "", constru
   );
   console.log(sortedDrivers)
 
+  // Get race labels. A driver may not participate in each race so we iterate
+  // over three of them just to be safe.
+  const uniqueRaces = new Set();
+  for (let i = 0; i < 3; i++) {
+    Object.values(sortedDrivers[i][1]).forEach((raceResult) => {
+      if (raceResult.raceName) {
+        uniqueRaces.add(constants.grandPrixAbbreviations[raceResult.raceName])
+      }
+    })
+  }
+  const raceLabels = Array.from(uniqueRaces);
+
   // Update start/end date dropdowns.
   seasonSummary.createStartEndDropdown(jsonData);
 
@@ -38,10 +52,11 @@ async function populatePage(season = 2021, startDate = "", endDate = "", constru
   }
   if (driverDetail != null) {
     const singleDriver = [sortedDrivers[driverDetail]];
+    const driverName = singleDriver[0][0]
     // TODO: Update this chart with a bart chart of quali and finish positions.
-    const driverDataset = seasonSummary.generateDatasets(singleDriver);
+    const driverDataset = seasonSummary.generateSingleDriverData(singleDriver);
     chart = seasonSummaryTable.generateSeasonSummary(
-      singleDriver, driverDataset, ctx, changeSeasonRefresh
+      raceLabels, driverDataset, ctx, backToMain, driverName, "bar"
     )
   } else if (constructors) {
     const sortedConstructors = seasonSummary.computeConstructorPoints(
@@ -50,12 +65,13 @@ async function populatePage(season = 2021, startDate = "", endDate = "", constru
     console.log(sortedConstructors)
     const constructorDataset = seasonSummary.generateConstructorDataset(sortedConstructors);
     chart = seasonSummaryTable.generateConstructorSummary(
-      sortedConstructors, constructorDataset, ctx
+      raceLabels, constructorDataset, ctx
     )
   } else {
     const driverDataset = seasonSummary.generateDatasets(sortedDrivers);
+    const title = `Driver's Championship ${season}`
     chart = seasonSummaryTable.generateSeasonSummary(
-      sortedDrivers, driverDataset, ctx, handleDriverClick
+      raceLabels, driverDataset, ctx, handleDriverClick, title
     )
   }
 
@@ -79,6 +95,14 @@ const repopulatePage = e => {
   let season = document.getElementById("season").value
   let inputStartDate = document.getElementById("start-date").value;
   let inputEndDate = document.getElementById("end-date").value;
+  let constructors = document.querySelector('#constructor').checked;
+  // Driver num is not enough. Order of drivers changes depending on how you filter
+  // Figure out a way to pass the driver name or something and filter on that.
+  // if (driverView) {
+  //   populatePage(season, inputStartDate, inputEndDate, constructors, driverNum)
+  // } else {
+    // }
+  // perhaps save what the last submitted dates were in case we jump to driver view
   populatePage(season, inputStartDate, inputEndDate);
 }
 
@@ -88,13 +112,32 @@ const championshipToggle = e => {
   populatePage(season, "", "", constructors);
 }
 
-const handleDriverClick = (e, legendItem, legend) => {
+const handleDriverClick = (e, legendItem, _) => {
   let season = document.getElementById("season").value
   let constructors = document.querySelector('#constructor').checked;
-  console.log(legend);
-  console.log(legendItem);
-  let driverDetail = legendItem.datasetIndex;
-  populatePage(season, "", "", constructors, driverDetail);
+  let inputStartDate = document.getElementById("start-date").value;
+  let inputEndDate = document.getElementById("end-date").value;
+  if (inputStartDate === inputEndDate) {
+    inputStartDate = "";
+    inputEndDate = "";
+  }
+  driverNum = legendItem.datasetIndex;
+  driverView = true;
+  populatePage(season, inputStartDate, inputEndDate, constructors, driverNum);
+}
+
+const backToMain = e => {
+  driverView = false;
+  driverNum = null;
+  let season = document.getElementById("season").value
+  let inputStartDate = document.getElementById("start-date").value;
+  let inputEndDate = document.getElementById("end-date").value;
+  let constructors = document.querySelector('#constructor').checked;
+  if (inputStartDate === inputEndDate) {
+    inputStartDate = "";
+    inputEndDate = "";
+  }
+  populatePage(season, inputStartDate, inputEndDate, constructors);
 }
 
 populatePage();

@@ -81,14 +81,14 @@ export function generateTable(sortedDrivers) {
   return table;
 }
 
-export function generateSeasonSummary(sortedDrivers, seasonDataset, ctx, callback) {
+export function generateSeasonSummary(raceLabels, seasonDataset, ctx, callback, title, type = "line") {
   // Chart.register(autocolors);
+
   const chart = new Chart(ctx, {
-    type: 'line',
+    type: type,
     data: {
       // TODO: Improve how we get labels for races
-      labels: Object.values(sortedDrivers[0][1])
-        .map((stats) => constants.grandPrixAbbreviations[stats.raceName]),
+      labels: raceLabels,
       datasets: seasonDataset
     },
     options: {
@@ -102,6 +102,17 @@ export function generateSeasonSummary(sortedDrivers, seasonDataset, ctx, callbac
           onClick: callback,
           display: true,
           position: 'left'
+        },
+        title: {
+          display: true,
+          text: title,
+          font: {
+            size: 24
+          },
+          padding: {
+            top: 10,
+            bottom: 10
+          },
         }
       }
     }
@@ -109,13 +120,12 @@ export function generateSeasonSummary(sortedDrivers, seasonDataset, ctx, callbac
   return chart;
 }
 
-export function generateConstructorSummary(sortedConstructors, constructorDataset, ctx) {
+export function generateConstructorSummary(raceLabels, constructorDataset, ctx) {
   // Chart.register(autocolors);
   const chart = new Chart(ctx, {
     type: 'line',
     data: {
-      labels: Object.values(sortedConstructors[0][1])
-        .map((stats) => constants.grandPrixAbbreviations[stats.raceName]),
+      labels: raceLabels,
       datasets: constructorDataset
     },
     options: {

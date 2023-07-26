@@ -116,6 +116,26 @@ export function generateConstructorDataset(sortedConstructors) {
   });
   return seasonDataset;
 }
+// Driver Detail
+export function generateSingleDriverData(singleDriver) {
+  const driverName = singleDriver[0][0];
+  let driverData = Object.values(singleDriver[0][1])
+  console.log(driverData)
+  driverData = driverData.slice(0, driverData.length - 1)
+  console.log(driverData);
+  console.log(driverData.map((race) => race.qualiPosition))
+  const qualiDataset = {
+    label: "Qualifying",
+    data: driverData.map((race) => race.qualiPosition),
+    // backgroundColor: "black",
+  }
+  const raceDataset = {
+    label: "Race Finish",
+    data: driverData.map((race) => race.finishPosition),
+    // backgroundColor: "red",
+  }
+  return [qualiDataset, raceDataset];
+}
 
 export function createStartEndDropdown(response) {
   const startDate = document.getElementById("start-date");
