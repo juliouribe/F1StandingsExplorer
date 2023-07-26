@@ -35,3 +35,34 @@ export function removeAllChildren(elementId) {
   }
   return parentElement;
 }
+
+export function createStartEndDropdown(response) {
+  // Generates dropdown options for the start and end date filters.
+  const startDate = removeAllChildren("start-date");
+  const endDate = removeAllChildren("end-date");
+  const races = response.MRData.RaceTable.Races;
+  races.forEach((race) => {
+    const shortName = constants.grandPrixAbbreviations[race.raceName];
+    const optionText = `${shortName} - ${race.date}`;
+    const startOption = populateElement("option", optionText, startDate);
+    startOption.setAttribute("value", race.date);
+    const endOption = populateElement("option", optionText, endDate);
+    endOption.setAttribute("value", race.date);
+  })
+}
+
+export function createSeasonSelectDropdown() {
+  /*
+  Creates season selection dropdown options for the last X number of years.
+  Number of years is defined in constants.numberOfSeasons.
+  */
+  const seasonOptions = document.getElementById("season")
+  const today = new Date()
+  const currentYear = today.getFullYear();
+  for (let i = 0; i < constants.numberOfSeasons; i++) {
+    const year = parseInt(currentYear - i);
+    const yearOption = populateElement("option", year, seasonOptions)
+    yearOption.setAttribute("value", year);
+    if (year === 2021) yearOption.setAttribute("selected", true);
+  }
+}

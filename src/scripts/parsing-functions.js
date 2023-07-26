@@ -133,37 +133,6 @@ export function generateSingleDriverData(singleDriver) {
   return [qualiDataset, raceDataset];
 }
 
-export function createStartEndDropdown(response) {
-  // Generates dropdown options for the start and end date filters.
-  const startDate = utils.removeAllChildren("start-date");
-  const endDate = utils.removeAllChildren("end-date");
-  const races = response.MRData.RaceTable.Races;
-  races.forEach((race) => {
-    const shortName = constants.grandPrixAbbreviations[race.raceName];
-    const optionText = `${shortName} - ${race.date}`;
-    const startOption = utils.populateElement("option", optionText, startDate);
-    startOption.setAttribute("value", race.date);
-    const endOption = utils.populateElement("option", optionText, endDate);
-    endOption.setAttribute("value", race.date);
-  })
-}
-
-export function createSeasonSelectDropdown() {
-  /*
-  Creates season selection dropdown options for the last X number of years.
-  Number of years is defined in constants.numberOfSeasons.
-  */
-  const seasonOptions = document.getElementById("season")
-  const today = new Date()
-  const currentYear = today.getFullYear();
-  for (let i = 0; i < constants.numberOfSeasons; i++) {
-    const year = parseInt(currentYear - i);
-    const yearOption = utils.populateElement("option", year, seasonOptions)
-    yearOption.setAttribute("value", year);
-    if (year === 2021) yearOption.setAttribute("selected", true);
-  }
-}
-
 export function computeConstructorPoints(response, startDate, endDate) {
   const races = response.MRData.RaceTable.Races;
   const constructors = {};

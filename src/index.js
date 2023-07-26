@@ -31,7 +31,7 @@ async function populatePage(season = 2021, startDate = "", endDate = "", constru
   console.log(sortedDrivers)
 
   // Update start/end date dropdowns.
-  parsingFunctions.createStartEndDropdown(jsonData);
+  utils.createStartEndDropdown(jsonData);
 
   // Create Season Summary Line-graphs
   const canvas = document.getElementById("graph-canvas")
@@ -43,7 +43,6 @@ async function populatePage(season = 2021, startDate = "", endDate = "", constru
   if (driverDetail != null) {
     const singleDriver = [sortedDrivers[driverDetail]];
     const driverName = singleDriver[0][0]
-    // TODO: Update this chart with a bart chart of quali and finish positions.
     const driverDataset = parsingFunctions.generateSingleDriverData(singleDriver);
     chart = tableFunctions.generateSeasonSummary(
       raceLabels, driverDataset, ctx, backToMain, driverName, "bar"
@@ -64,7 +63,6 @@ async function populatePage(season = 2021, startDate = "", endDate = "", constru
       raceLabels, driverDataset, ctx, handleDriverClick, title
     )
   }
-
   // Create Positions Table
   const table = tableFunctions.generateTable(sortedDrivers, raceLabels);
   const pointsTable = document.querySelector(".table-container");
@@ -131,7 +129,7 @@ const backToMain = e => {
 }
 
 populatePage();
-parsingFunctions.createSeasonSelectDropdown();
+utils.createSeasonSelectDropdown();
 const filtersForm = document.querySelector(".data-filters");
 const seasonSelection = document.querySelector("#season");
 const championship = document.querySelector("#championship");
