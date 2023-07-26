@@ -4,7 +4,7 @@ import * as seasonSummaryTable from './scripts/season-summary-table'
 
 let chart;
 
-async function populatePage(season = 2021, startDate = "", endDate = "", constructors = true) {
+async function populatePage(season = 2021, startDate = "", endDate = "", constructors = false) {
   // Parse race data
   let jsonData = JSON.parse(localStorage.getItem(season));
   // If we're not using cached data, get from local file or fetching from API.

@@ -96,6 +96,12 @@ export function generateSeasonSummary(sortedDrivers, seasonDataset, ctx) {
         const dataX = chart.scales.x.getValueForPixel(canvasPosition.x);
         const dataY = chart.scales.y.getValueForPixel(canvasPosition.y);
       },
+      plugins: {
+        legend: {
+          display: true,
+          position: 'left'
+        }
+      }
     }
   });
   return chart;
@@ -116,6 +122,12 @@ export function generateConstructorSummary(sortedConstructors, constructorDatase
         const dataX = chart.scales.x.getValueForPixel(canvasPosition.x);
         const dataY = chart.scales.y.getValueForPixel(canvasPosition.y);
       },
+      plugins: {
+        legend: {
+          display: true,
+          position: 'left'
+        }
+      }
     }
   });
   return chart;
