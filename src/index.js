@@ -1,6 +1,6 @@
 import * as constants from './scripts/constants';
 import * as seasonSummary from './scripts/season-summary';
-import * as seasonSummaryTable from './scripts/season-summary-table'
+import * as tableFunctions from './scripts/table-functions'
 import * as utils from './scripts/utils'
 
 let chart;
@@ -45,7 +45,7 @@ async function populatePage(season = 2021, startDate = "", endDate = "", constru
     const driverName = singleDriver[0][0]
     // TODO: Update this chart with a bart chart of quali and finish positions.
     const driverDataset = seasonSummary.generateSingleDriverData(singleDriver);
-    chart = seasonSummaryTable.generateSeasonSummary(
+    chart = tableFunctions.generateSeasonSummary(
       raceLabels, driverDataset, ctx, backToMain, driverName, "bar"
     )
   } else if (constructors) {
@@ -54,19 +54,19 @@ async function populatePage(season = 2021, startDate = "", endDate = "", constru
     );
     const title = `Constructor's Championship ${season}`;
     const constructorDataset = seasonSummary.generateConstructorDataset(sortedConstructors);
-    chart = seasonSummaryTable.generateConstructorSummary(
+    chart = tableFunctions.generateConstructorSummary(
       raceLabels, constructorDataset, ctx, title
     )
   } else {
     const driverDataset = seasonSummary.generateDatasets(sortedDrivers);
     const title = `Driver's Championship ${season}`
-    chart = seasonSummaryTable.generateSeasonSummary(
+    chart = tableFunctions.generateSeasonSummary(
       raceLabels, driverDataset, ctx, handleDriverClick, title
     )
   }
 
   // Create Positions Table
-  const table = seasonSummaryTable.generateTable(sortedDrivers, raceLabels);
+  const table = tableFunctions.generateTable(sortedDrivers, raceLabels);
   const pointsTable = document.querySelector(".table-container");
   pointsTable.childNodes.forEach(child => child.remove())
   pointsTable.appendChild(table);
