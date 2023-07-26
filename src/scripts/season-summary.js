@@ -1,5 +1,6 @@
 // Functions for processing data related to the Season Summary Main View.
 import * as constants from './constants';
+import * as utils from './utils';
 
 export async function fetchSeasonResults(season = 2021) {
   const url = `http://ergast.com/api/f1/${season}/results.json?limit=500`
@@ -48,26 +49,24 @@ export function parseSeasonResults(response, startDate, endDate) {
   const races = response.MRData.RaceTable.Races;
   const drivers = {};
   races.forEach((race) => {
-    const raceName = race.raceName;
-    // Insert filtering for date
-    const raceDate = new Date(race.date);
+    // Apply optional date filters for start and end dates.
     if (startDate) {
+      const raceDate = new Date(race.date);
       const startFilter = new Date(startDate);
       const endFilter = new Date(endDate);
-
       if (raceDate.getFullYear() === startFilter.getFullYear()) {
         if (raceDate < startFilter || raceDate > endFilter) {
           return;
         }
       }
     }
-
+    const raceName = race.raceName;
     const round = race.round;
+    // Update driver object with respective race results.
     race.Results.forEach((raceResult) => {
       const first = raceResult.Driver.givenName;
       const last = raceResult.Driver.familyName;
       const driver = `${first} ${last}`
-
       // Create default entries if they don't exist.
       if (!drivers[driver]) drivers[driver] = {};
       if (!drivers[driver]["pointsTotal"]) drivers[driver]["pointsTotal"] = 0;
@@ -83,17 +82,17 @@ export function parseSeasonResults(response, startDate, endDate) {
       }
     })
   })
-  // Sort drivers by total points. Returns an array with 2 element subarrays.
-  // The first element is the driver ID and the second element is the full
-  // driver results. Each round is a key for the full race result.
-  const seasonResults = Object.entries(drivers)
-    .sort(([, a], [, b]) => b.pointsTotal - a.pointsTotal);
-
-  return seasonResults;
+  /*
+  Sort drivers by total points. Returns an array with 2 element subarrays. The
+  first element is the driver name and the second element is the full driver
+  results for a given season. Each round is a key for the full race result.
+  */
+  return Object.entries(drivers)
+    .sort(([, raceA], [, raceB]) => raceB.pointsTotal - raceA.pointsTotal);;
 }
 
-// Driver's Championship
 export function generateDatasets(sortedDrivers) {
+  // Generate chart data for the Driver's Championship.
   const seasonDataset = [];
   sortedDrivers.forEach((driver) => {
     const driverData = {
@@ -104,8 +103,9 @@ export function generateDatasets(sortedDrivers) {
   });
   return seasonDataset;
 }
-// Constructor's Championship
+
 export function generateConstructorDataset(sortedConstructors) {
+  // Generate chart data for the Constructor's Championship.
   const seasonDataset = [];
   sortedConstructors.forEach((constructor) => {
     const constructorData = {
@@ -116,66 +116,51 @@ export function generateConstructorDataset(sortedConstructors) {
   });
   return seasonDataset;
 }
-// Driver Detail
+
 export function generateSingleDriverData(singleDriver) {
+  // Generate chart data for the Driver Detail view.
   const driverName = singleDriver[0][0];
   let driverData = Object.values(singleDriver[0][1])
-  console.log(driverData)
   driverData = driverData.slice(0, driverData.length - 1)
-  console.log(driverData);
-  console.log(driverData.map((race) => race.qualiPosition))
   const qualiDataset = {
     label: "Qualifying",
     data: driverData.map((race) => race.qualiPosition),
-    // backgroundColor: "black",
   }
   const raceDataset = {
     label: "Race Finish",
     data: driverData.map((race) => race.finishPosition),
-    // backgroundColor: "red",
   }
   return [qualiDataset, raceDataset];
 }
 
 export function createStartEndDropdown(response) {
-  const startDate = document.getElementById("start-date");
-  const endDate = document.getElementById("end-date");
-  // Clear out previous dropdown options.
-  while (startDate.firstChild) {
-    startDate.removeChild(startDate.firstChild)
-  }
-  while (endDate.firstChild) {
-    endDate.removeChild(endDate.firstChild)
-  }
-  // Populate options with dates from current year.
+  // Generates dropdown options for the start and end date filters.
+  const startDate = utils.removeAllChildren("start-date");
+  const endDate = utils.removeAllChildren("end-date");
   const races = response.MRData.RaceTable.Races;
   races.forEach((race) => {
-    const optionStart = document.createElement("option");
-    const optionEnd = document.createElement("option");
     const shortName = constants.grandPrixAbbreviations[race.raceName];
-    optionStart.innerHTML = `${shortName} - ${race.date}`;
-    optionStart.setAttribute("value", race.date)
-    optionEnd.innerHTML = `${shortName} - ${race.date}`;
-    optionEnd.setAttribute("value", race.date)
-    startDate.appendChild(optionStart);
-    endDate.appendChild(optionEnd);
+    const optionText = `${shortName} - ${race.date}`;
+    const startOption = utils.populateElement("option", optionText, startDate);
+    startOption.setAttribute("value", race.date);
+    const endOption = utils.populateElement("option", optionText, endDate);
+    endOption.setAttribute("value", race.date);
   })
 }
 
 export function createSeasonSelectDropdown() {
-  // Populate season select dropdown.
+  /*
+  Creates season selection dropdown options for the last X number of years.
+  Number of years is defined in constants.numberOfSeasons.
+  */
   const seasonOptions = document.getElementById("season")
   const today = new Date()
   const currentYear = today.getFullYear();
   for (let i = 0; i < constants.numberOfSeasons; i++) {
-    const seasonOption = document.createElement("option");
     const year = parseInt(currentYear - i);
-    seasonOption.innerHTML = year;
-    seasonOption.setAttribute("value", year);
-    if (year === 2021) {
-      seasonOption.setAttribute("selected", true);
-    }
-    seasonOptions.appendChild(seasonOption);
+    const yearOption = utils.populateElement("option", year, seasonOptions)
+    yearOption.setAttribute("value", year);
+    if (year === 2021) yearOption.setAttribute("selected", true);
   }
 }
 

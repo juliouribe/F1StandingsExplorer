@@ -16,8 +16,8 @@ export function getRaceLabels(sortedDrivers) {
 
 export function populateElement(type, text, parent = null, eleClass = null) {
   /*
-  Takes in an element, populates the text, and optionally appends it to a parent
-  element and adds a class if given. Returns the newElement.
+  Takes in an element, populates the text, and optionally adds it to a parent,
+  adds a class, or sets an attribute with a value. Returns the newElement.
 
   */
   const newElement = document.createElement(type);
@@ -25,4 +25,13 @@ export function populateElement(type, text, parent = null, eleClass = null) {
   if (parent != null) parent.appendChild(newElement);
   if (eleClass) newElement.classList.add(eleClass);
   return newElement;
+}
+
+export function removeAllChildren(elementId) {
+  // Retrieves element by ID and removes all children.
+  const parentElement = document.getElementById(elementId);
+  while (parentElement.firstChild) {
+    parentElement.removeChild(parentElement.firstChild)
+  }
+  return parentElement;
 }

@@ -1,5 +1,4 @@
 // Functions for creating graphs for the season summary view.
-import * as constants from './constants';
 import * as utils from './utils';
 import Chart from 'chart.js/auto';
 import { getRelativePosition } from 'chart.js/helpers';
