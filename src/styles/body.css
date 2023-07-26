@@ -52,7 +52,7 @@ body {
 
 
 #instructions > ul > li::before {
-  content: "• ";
+  content: "🏎️ ";
 }
 
 /* Styling the results table */
