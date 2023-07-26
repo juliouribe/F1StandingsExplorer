@@ -4,7 +4,7 @@ import * as seasonSummaryTable from './scripts/season-summary-table'
 
 let chart;
 
-async function populatePage(season = 2021, startDate = "", endDate = "", constructors = false) {
+async function populatePage(season = 2021, startDate = "", endDate = "", constructors = false, driverDetail = null) {
   // Parse race data
   let jsonData = JSON.parse(localStorage.getItem(season));
   // If we're not using cached data, get from local file or fetching from API.
@@ -36,7 +36,14 @@ async function populatePage(season = 2021, startDate = "", endDate = "", constru
   if (chart) {
     chart.destroy()
   }
-  if (constructors) {
+  if (driverDetail != null) {
+    const singleDriver = [sortedDrivers[driverDetail]];
+    // TODO: Update this chart with a bart chart of quali and finish positions.
+    const driverDataset = seasonSummary.generateDatasets(singleDriver);
+    chart = seasonSummaryTable.generateSeasonSummary(
+      singleDriver, driverDataset, ctx, changeSeasonRefresh
+    )
+  } else if (constructors) {
     const sortedConstructors = seasonSummary.computeConstructorPoints(
       jsonData, startDate, endDate
     );
@@ -48,7 +55,7 @@ async function populatePage(season = 2021, startDate = "", endDate = "", constru
   } else {
     const driverDataset = seasonSummary.generateDatasets(sortedDrivers);
     chart = seasonSummaryTable.generateSeasonSummary(
-      sortedDrivers, driverDataset, ctx
+      sortedDrivers, driverDataset, ctx, handleDriverClick
     )
   }
 
@@ -60,13 +67,14 @@ async function populatePage(season = 2021, startDate = "", endDate = "", constru
 }
 
 const changeSeasonRefresh = e => {
-  // e.preventDefault();
   let season = document.getElementById("season").value
+  let constructors = document.querySelector('#constructor').checked;
   // When you change season don't pass in start/end date.
-  populatePage(season);
+  populatePage(season, "", "", constructors);
 }
 
 const repopulatePage = e => {
+  // This can be triggered but the submit action.
   e.preventDefault();
   let season = document.getElementById("season").value
   let inputStartDate = document.getElementById("start-date").value;
@@ -77,8 +85,16 @@ const repopulatePage = e => {
 const championshipToggle = e => {
   let season = document.getElementById("season").value
   let constructors = document.querySelector('#constructor').checked;
-  console.log(`hey this is constructors ${constructors}`)
   populatePage(season, "", "", constructors);
+}
+
+const handleDriverClick = (e, legendItem, legend) => {
+  let season = document.getElementById("season").value
+  let constructors = document.querySelector('#constructor').checked;
+  console.log(legend);
+  console.log(legendItem);
+  let driverDetail = legendItem.datasetIndex;
+  populatePage(season, "", "", constructors, driverDetail);
 }
 
 populatePage();

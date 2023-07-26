@@ -81,12 +81,13 @@ export function generateTable(sortedDrivers) {
   return table;
 }
 
-export function generateSeasonSummary(sortedDrivers, seasonDataset, ctx) {
+export function generateSeasonSummary(sortedDrivers, seasonDataset, ctx, callback) {
   // Chart.register(autocolors);
   const chart = new Chart(ctx, {
     type: 'line',
     data: {
-      labels: Object.values(sortedDrivers[4][1])
+      // TODO: Improve how we get labels for races
+      labels: Object.values(sortedDrivers[0][1])
         .map((stats) => constants.grandPrixAbbreviations[stats.raceName]),
       datasets: seasonDataset
     },
@@ -98,6 +99,7 @@ export function generateSeasonSummary(sortedDrivers, seasonDataset, ctx) {
       },
       plugins: {
         legend: {
+          onClick: callback,
           display: true,
           position: 'left'
         }
