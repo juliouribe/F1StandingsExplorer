@@ -168,10 +168,9 @@ export function computeConstructorPoints(response, startDate, endDate) {
   const races = response.MRData.RaceTable.Races;
   const constructors = {};
   races.forEach((race) => {
-    const raceName = race.raceName;
-    // Insert filtering for date
-    const raceDate = new Date(race.date);
+    // Optionally filter out races if start and end dates are given.
     if (startDate) {
+      const raceDate = new Date(race.date);
       const startFilter = new Date(startDate);
       const endFilter = new Date(endDate);
       if (raceDate.getFullYear() === startFilter.getFullYear()) {
@@ -180,11 +179,10 @@ export function computeConstructorPoints(response, startDate, endDate) {
         }
       }
     }
-
+    const raceName = race.raceName;
     const round = race.round;
     race.Results.forEach((raceResult) => {
       const constructor = raceResult.Constructor.name;
-
       // Create default entries if they don't exist.
       if (!constructors[constructor]) constructors[constructor] = {};
       if (!constructors[constructor]["pointsTotal"]) constructors[constructor]["pointsTotal"] = 0;
@@ -202,11 +200,11 @@ export function computeConstructorPoints(response, startDate, endDate) {
       }
     })
   })
-  // Sort drivers by total points. Returns an array with 2 element subarrays.
-  // The first element is the driver ID and the second element is the full
-  // driver results. Each round is a key for the full race result.
-  const seasonResults = Object.entries(constructors)
-    .sort(([, a], [, b]) => b.pointsTotal - a.pointsTotal);
-
-  return seasonResults;
+  /*
+  Sort constructors by total points. Returns an array with 2 element subarrays.
+  The first element is the team name and the second element is the full
+  constructor's results.
+  */
+  return Object.entries(constructors)
+    .sort(([, raceA], [, raceB]) => raceB.pointsTotal - raceA.pointsTotal);;
 }

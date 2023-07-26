@@ -1,5 +1,5 @@
 import * as constants from './scripts/constants';
-import * as seasonSummary from './scripts/season-summary';
+import * as parsingFunctions from './scripts/parsing-functions';
 import * as tableFunctions from './scripts/table-functions'
 import * as utils from './scripts/utils'
 
@@ -14,24 +14,24 @@ async function populatePage(season = 2021, startDate = "", endDate = "", constru
   if (jsonData === null) {
     if (constants.localFileSeasons.includes(parseInt(season))) {
       console.log("Loading local file");
-      jsonData = await seasonSummary.loadResultsJson(season);
+      jsonData = await parsingFunctions.loadResultsJson(season);
     } else {
       console.log("Querying API");
-      jsonData = await seasonSummary.fetchSeasonResults(season);
+      jsonData = await parsingFunctions.fetchSeasonResults(season);
     }
     localStorage.setItem(season, JSON.stringify(jsonData));
   } else {
     console.log("Found data in local storage");
   }
   // Organize data into drivers from highest to lowest points.
-  const sortedDrivers = seasonSummary.parseSeasonResults(
+  const sortedDrivers = parsingFunctions.parseSeasonResults(
     jsonData, startDate, endDate
   );
   const raceLabels = utils.getRaceLabels(sortedDrivers);
   console.log(sortedDrivers)
 
   // Update start/end date dropdowns.
-  seasonSummary.createStartEndDropdown(jsonData);
+  parsingFunctions.createStartEndDropdown(jsonData);
 
   // Create Season Summary Line-graphs
   const canvas = document.getElementById("graph-canvas")
@@ -44,21 +44,21 @@ async function populatePage(season = 2021, startDate = "", endDate = "", constru
     const singleDriver = [sortedDrivers[driverDetail]];
     const driverName = singleDriver[0][0]
     // TODO: Update this chart with a bart chart of quali and finish positions.
-    const driverDataset = seasonSummary.generateSingleDriverData(singleDriver);
+    const driverDataset = parsingFunctions.generateSingleDriverData(singleDriver);
     chart = tableFunctions.generateSeasonSummary(
       raceLabels, driverDataset, ctx, backToMain, driverName, "bar"
     )
   } else if (constructors) {
-    const sortedConstructors = seasonSummary.computeConstructorPoints(
+    const sortedConstructors = parsingFunctions.computeConstructorPoints(
       jsonData, startDate, endDate
     );
     const title = `Constructor's Championship ${season}`;
-    const constructorDataset = seasonSummary.generateConstructorDataset(sortedConstructors);
+    const constructorDataset = parsingFunctions.generateConstructorDataset(sortedConstructors);
     chart = tableFunctions.generateConstructorSummary(
       raceLabels, constructorDataset, ctx, title
     )
   } else {
-    const driverDataset = seasonSummary.generateDatasets(sortedDrivers);
+    const driverDataset = parsingFunctions.generateDatasets(sortedDrivers);
     const title = `Driver's Championship ${season}`
     chart = tableFunctions.generateSeasonSummary(
       raceLabels, driverDataset, ctx, handleDriverClick, title
@@ -131,7 +131,7 @@ const backToMain = e => {
 }
 
 populatePage();
-seasonSummary.createSeasonSelectDropdown();
+parsingFunctions.createSeasonSelectDropdown();
 const filtersForm = document.querySelector(".data-filters");
 const seasonSelection = document.querySelector("#season");
 const championship = document.querySelector("#championship");
