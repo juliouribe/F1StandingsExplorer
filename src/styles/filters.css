@@ -1,6 +1,6 @@
 .data-filters {
   background: ghostwhite;
-  padding: 10px 20px;
+  padding: 5px 20px;
   border: black solid 1px;
   border-radius: 10px;
   display: flex;
@@ -10,7 +10,8 @@
 
 .data-filters label,
 .data-filters button {
-  margin: 2px;
+  margin: 0px 3px;
+  font-family: sans-serif;
 }
 
 .data-filters .toggle-label {
