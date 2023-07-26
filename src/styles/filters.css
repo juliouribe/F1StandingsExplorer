@@ -1,3 +1,10 @@
+.data-filters {
+  background: ghostwhite;
+  padding: 10px 20px;
+  border: black solid 1px;
+  border-radius: 10px;
+}
+
 /* Credit to W3 Schools documentation https://www.w3schools.com/howto/howto_css_switch.asp */
 /* The switch - the box around the slider */
 .switch {

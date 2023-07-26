@@ -11,6 +11,8 @@ body {
   margin: 20px 0px;
 }
 
+
+
 /* Styling Line Graph */
 .graph-container {
   /* previously 1200px by 500px */
@@ -29,8 +31,10 @@ body {
   background: ghostwhite;
   border: black solid 1px;
   left: 92%;
-  top: -5%;
+  top: -43px;
   padding: 3px;
+  border-radius: 5px;
+
 }
 
 #instructions > ul > li {
