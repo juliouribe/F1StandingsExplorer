@@ -62,10 +62,10 @@ async function populatePage(season = 2021, startDate = "", endDate = "", constru
     const sortedConstructors = seasonSummary.computeConstructorPoints(
       jsonData, startDate, endDate
     );
-    console.log(sortedConstructors)
+    const title = `Constructor's Championship ${season}`;
     const constructorDataset = seasonSummary.generateConstructorDataset(sortedConstructors);
     chart = seasonSummaryTable.generateConstructorSummary(
-      raceLabels, constructorDataset, ctx
+      raceLabels, constructorDataset, ctx, title
     )
   } else {
     const driverDataset = seasonSummary.generateDatasets(sortedDrivers);

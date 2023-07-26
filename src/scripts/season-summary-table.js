@@ -120,7 +120,7 @@ export function generateSeasonSummary(raceLabels, seasonDataset, ctx, callback, 
   return chart;
 }
 
-export function generateConstructorSummary(raceLabels, constructorDataset, ctx) {
+export function generateConstructorSummary(raceLabels, constructorDataset, ctx, title) {
   // Chart.register(autocolors);
   const chart = new Chart(ctx, {
     type: 'line',
@@ -138,6 +138,17 @@ export function generateConstructorSummary(raceLabels, constructorDataset, ctx) 
         legend: {
           display: true,
           position: 'left'
+        },
+        title: {
+          display: true,
+          text: title,
+          font: {
+            size: 24
+          },
+          padding: {
+            top: 10,
+            bottom: 10
+          },
         }
       }
     }
