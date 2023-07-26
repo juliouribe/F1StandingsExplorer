@@ -1,9 +1,10 @@
+import * as chartFunctions from './scripts/chart-functions';
 import * as constants from './scripts/constants';
 import * as parsingFunctions from './scripts/parsing-functions';
-import * as tableFunctions from './scripts/table-functions'
-import * as utils from './scripts/utils'
+import * as tableFunctions from './scripts/table-functions';
+import * as utils from './scripts/utils';
 
-let chart;
+let currentChart;
 let driverView;
 let driverNum;
 
@@ -29,34 +30,18 @@ async function populatePage(season = 2021, startDate = "", endDate = "", constru
   );
   const raceLabels = utils.getRaceLabels(sortedDrivers);
   console.log(sortedDrivers)
-
   // Update start/end date dropdowns.
   utils.createStartEndDropdown(jsonData);
 
-  // Create Season Summary Line-graphs
-  const ctx = utils.handleCanvas(chart);
+  // Render chart depending on which options are enabled.
+  const ctx = utils.handleCanvas(currentChart);
   if (driverDetail != null) {
     const singleDriver = [sortedDrivers[driverDetail]];
-    const driverName = singleDriver[0][0]
-    const driverDataset = parsingFunctions.generateSingleDriverData(singleDriver);
-    chart = tableFunctions.generateSeasonSummary(
-      raceLabels, driverDataset, ctx, backToMain, driverName, "bar"
-    )
+    currentChart = chartFunctions.renderDriverDetail(singleDriver, raceLabels, ctx)
   } else if (constructors) {
-    const sortedConstructors = parsingFunctions.computeConstructorPoints(
-      jsonData, startDate, endDate
-    );
-    const title = `Constructor's Championship ${season}`;
-    const constructorDataset = parsingFunctions.generateConstructorDataset(sortedConstructors);
-    chart = tableFunctions.generateConstructorSummary(
-      raceLabels, constructorDataset, ctx, title
-    )
+    currentChart = chartFunctions.renderConstructorsTable(jsonData, startDate, endDate, season, raceLabels, ctx);
   } else {
-    const driverDataset = parsingFunctions.generateDatasets(sortedDrivers);
-    const title = `Driver's Championship ${season}`
-    chart = tableFunctions.generateSeasonSummary(
-      raceLabels, driverDataset, ctx, handleDriverClick, title
-    )
+    currentChart = chartFunctions.renderDriversTable(sortedDrivers, season, raceLabels, ctx);
   }
   // Create Positions Table
   const table = tableFunctions.generateTable(sortedDrivers, raceLabels);
