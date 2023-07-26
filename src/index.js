@@ -34,12 +34,7 @@ async function populatePage(season = 2021, startDate = "", endDate = "", constru
   utils.createStartEndDropdown(jsonData);
 
   // Create Season Summary Line-graphs
-  const canvas = document.getElementById("graph-canvas")
-  const ctx = canvas.getContext("2d");
-  // Reset chart for potentially new graphs.
-  if (chart) {
-    chart.destroy()
-  }
+  const ctx = utils.handleCanvas(chart);
   if (driverDetail != null) {
     const singleDriver = [sortedDrivers[driverDetail]];
     const driverName = singleDriver[0][0]

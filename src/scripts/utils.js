@@ -1,5 +1,12 @@
 import * as constants from './constants';
 
+export function handleCanvas(chart=null) {
+  // Gets canvas and returns the context. Destroys chart if populated.
+  const canvas = document.getElementById("graph-canvas")
+  if (chart) chart.destroy()
+  return canvas.getContext("2d");
+}
+
 export function getRaceLabels(sortedDrivers) {
   // Get race labels. A driver may not participate in each race so we iterate
   // over three of them just to be safe.
