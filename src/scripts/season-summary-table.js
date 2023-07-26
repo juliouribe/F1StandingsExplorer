@@ -3,7 +3,6 @@ import * as constants from './constants';
 import * as utils from './utils';
 import Chart from 'chart.js/auto';
 import { getRelativePosition } from 'chart.js/helpers';
-// import autocolors from 'chartjs-plugin-autocolors';
 
 export function generateTable(sortedDrivers, raceLabels) {
   // Setup table layout elements.
@@ -14,7 +13,6 @@ export function generateTable(sortedDrivers, raceLabels) {
   utils.populateElement("th", "Pos.", header)
   // Add Driver column header.
   utils.populateElement("th", "Driver", header)
-
   // Add Race abbreviation headers.
   raceLabels.forEach((raceShortName) => {
     utils.populateElement("th", raceShortName, header)
@@ -27,6 +25,7 @@ export function generateTable(sortedDrivers, raceLabels) {
   // Generate driver rows.
   // Top level iterates over drivers (Y-Axis)
   const tbody = document.createElement("tbody");
+  // When date filters are applied we need to pull the respective key.
   const roundStart = parseInt(Object.keys(sortedDrivers[0][1])[0])
   sortedDrivers.forEach((driver, pos) => {
     const driverStats = driver[1];
@@ -35,7 +34,6 @@ export function generateTable(sortedDrivers, raceLabels) {
     utils.populateElement("th", (pos + 1).toString(), row)
     // Add driver's name.
     utils.populateElement("td", driver[0], row, "driver-name")
-
     // Inner loop iterates over race results (X-Axis).
     for (let i = roundStart; i < (raceLabels.length + roundStart); i++) {
       const raceResult = document.createElement("td");
@@ -69,15 +67,9 @@ export function generateTable(sortedDrivers, raceLabels) {
 }
 
 export function generateSeasonSummary(raceLabels, seasonDataset, ctx, callback, title, type = "line") {
-  // Chart.register(autocolors);
-
   const chart = new Chart(ctx, {
     type: type,
-    data: {
-      // TODO: Improve how we get labels for races
-      labels: raceLabels,
-      datasets: seasonDataset
-    },
+    data: { labels: raceLabels, datasets: seasonDataset },
     options: {
       onClick: (e) => {
         const canvasPosition = getRelativePosition(e, chart);
@@ -93,13 +85,8 @@ export function generateSeasonSummary(raceLabels, seasonDataset, ctx, callback, 
         title: {
           display: true,
           text: title,
-          font: {
-            size: 24
-          },
-          padding: {
-            top: 10,
-            bottom: 10
-          },
+          font: { size: 24 },
+          padding: { top: 10, bottom: 10 },
         }
       }
     }
@@ -108,13 +95,9 @@ export function generateSeasonSummary(raceLabels, seasonDataset, ctx, callback, 
 }
 
 export function generateConstructorSummary(raceLabels, constructorDataset, ctx, title) {
-  // Chart.register(autocolors);
   const chart = new Chart(ctx, {
     type: 'line',
-    data: {
-      labels: raceLabels,
-      datasets: constructorDataset
-    },
+    data: { labels: raceLabels, datasets: constructorDataset },
     options: {
       onClick: (e) => {
         const canvasPosition = getRelativePosition(e, chart);
@@ -129,13 +112,8 @@ export function generateConstructorSummary(raceLabels, constructorDataset, ctx, 
         title: {
           display: true,
           text: title,
-          font: {
-            size: 24
-          },
-          padding: {
-            top: 10,
-            bottom: 10
-          },
+          font: { size: 24 },
+          padding: { top: 10, bottom: 10 },
         }
       }
     }
