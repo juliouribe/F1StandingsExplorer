@@ -35,6 +35,7 @@ export const grandPrixAbbreviations = {
   "Mexican Grand Prix": "MEX",
   "Malaysian Grand Prix": "MAL",
   "European Grand Prix": "EUR",
+  "Sakhir Grand Prix": "SKH",
 }
 
 export const localFileSeasons = [2021, 2022];

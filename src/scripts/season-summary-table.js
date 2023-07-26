@@ -5,6 +5,7 @@ import { getRelativePosition } from 'chart.js/helpers';
 // import autocolors from 'chartjs-plugin-autocolors';
 
 export function generateTable(sortedDrivers) {
+  // Setup table layout elements.
   const table = document.createElement("table");
   const thead = document.createElement("thead");
   const header = document.createElement("tr");
@@ -14,22 +15,25 @@ export function generateTable(sortedDrivers) {
   const driverColumn = document.createElement("th");
   driverColumn.innerHTML = "Driver";
   header.appendChild(driverColumn);
+
   // Generate headers.
-  const firstDriver = sortedDrivers[0][1]
-  // Figure out how many races there are, i.e. don't include Total column.
-  let numRaces = 0;
-  Object.values(firstDriver).forEach((ele) => {
+  const uniqueRaces = new Set();
+  for (let i = 0; i < 3; i++) {
+    Object.values(sortedDrivers[i][1]).forEach((raceResult) => {
+      if (raceResult.raceName) uniqueRaces.add(raceResult.raceName)
+    })
+  }
+  for (const raceName of uniqueRaces) {
     const column = document.createElement("th");
-    if (typeof ele === "object") {
-      column.innerHTML = constants.grandPrixAbbreviations[ele.raceName];
-      numRaces++;
-    } else {
-      column.innerHTML = "Total"
-    }
+    column.innerHTML = constants.grandPrixAbbreviations[raceName];
     header.appendChild(column);
-  })
+  }
+  const column = document.createElement("th");
+  column.innerHTML = "Total"
+  header.appendChild(column);
   thead.appendChild(header)
   table.appendChild(thead)
+
   // Generate driver rows.
   // Top level iterates over drivers (Y-Axis)
   const tbody = document.createElement("tbody");
@@ -45,7 +49,7 @@ export function generateTable(sortedDrivers) {
     driverName.classList.add("driver-name");
     row.appendChild(driverName);
     // Inner loop iterates over race results (X-Axis).
-    for (let i = roundStart; i < (numRaces + roundStart); i++) {
+    for (let i = roundStart; i < (uniqueRaces.size + roundStart); i++) {
       const raceResult = document.createElement("td");
       raceResult.classList.add("data-cell")
       // Cell will be empty if a driver didn't participate in a given round.
@@ -82,9 +86,29 @@ export function generateSeasonSummary(sortedDrivers, seasonDataset, ctx) {
   const chart = new Chart(ctx, {
     type: 'line',
     data: {
-      labels: Object.values(sortedDrivers[0][1])
+      labels: Object.values(sortedDrivers[4][1])
         .map((stats) => constants.grandPrixAbbreviations[stats.raceName]),
       datasets: seasonDataset
+    },
+    options: {
+      onClick: (e) => {
+        const canvasPosition = getRelativePosition(e, chart);
+        const dataX = chart.scales.x.getValueForPixel(canvasPosition.x);
+        const dataY = chart.scales.y.getValueForPixel(canvasPosition.y);
+      },
+    }
+  });
+  return chart;
+}
+
+export function generateConstructorSummary(sortedConstructors, constructorDataset, ctx) {
+  // Chart.register(autocolors);
+  const chart = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: Object.values(sortedConstructors[0][1])
+        .map((stats) => constants.grandPrixAbbreviations[stats.raceName]),
+      datasets: constructorDataset
     },
     options: {
       onClick: (e) => {

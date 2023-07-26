@@ -92,6 +92,7 @@ export function parseSeasonResults(response, startDate, endDate) {
   return seasonResults;
 }
 
+// Driver's Championship
 export function generateDatasets(sortedDrivers) {
   const seasonDataset = [];
   sortedDrivers.forEach((driver) => {
@@ -100,6 +101,18 @@ export function generateDatasets(sortedDrivers) {
       data: Object.values(driver[1]).map((stats) => stats.currentPoints)
     }
     seasonDataset.push(driverData);
+  });
+  return seasonDataset;
+}
+// Constructor's Championship
+export function generateConstructorDataset(sortedConstructors) {
+  const seasonDataset = [];
+  sortedConstructors.forEach((constructor) => {
+    const constructorData = {
+      label: constructor[0],
+      data: Object.values(constructor[1]).map((stats) => stats.currentPoints)
+    }
+    seasonDataset.push(constructorData);
   });
   return seasonDataset;
 }
@@ -144,4 +157,51 @@ export function createSeasonSelectDropdown() {
     }
     seasonOptions.appendChild(seasonOption);
   }
+}
+
+export function computeConstructorPoints(response, startDate, endDate) {
+  const races = response.MRData.RaceTable.Races;
+  const constructors = {};
+  races.forEach((race) => {
+    const raceName = race.raceName;
+    // Insert filtering for date
+    const raceDate = new Date(race.date);
+    if (startDate) {
+      const startFilter = new Date(startDate);
+      const endFilter = new Date(endDate);
+      if (raceDate.getFullYear() === startFilter.getFullYear()) {
+        if (raceDate < startFilter || raceDate > endFilter) {
+          return;
+        }
+      }
+    }
+
+    const round = race.round;
+    race.Results.forEach((raceResult) => {
+      const constructor = raceResult.Constructor.name;
+
+      // Create default entries if they don't exist.
+      if (!constructors[constructor]) constructors[constructor] = {};
+      if (!constructors[constructor]["pointsTotal"]) constructors[constructor]["pointsTotal"] = 0;
+      // We'll use finish and quali in the driver detail view.
+      constructors[constructor]["pointsTotal"] += parseInt(raceResult.points);
+      // Each team has two drivers
+      if (constructors[constructor][round]) {
+        constructors[constructor][round]["points"] += raceResult.points
+      }
+      constructors[constructor][round] = {
+        "raceName": raceName,
+        "points": raceResult.points,
+        "currentPoints": constructors[constructor]["pointsTotal"],
+        "date": race.date
+      }
+    })
+  })
+  // Sort drivers by total points. Returns an array with 2 element subarrays.
+  // The first element is the driver ID and the second element is the full
+  // driver results. Each round is a key for the full race result.
+  const seasonResults = Object.entries(constructors)
+    .sort(([, a], [, b]) => b.pointsTotal - a.pointsTotal);
+
+  return seasonResults;
 }
