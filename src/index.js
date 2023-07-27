@@ -83,6 +83,7 @@ async function populatePage() {
   const sortedDrivers = parsingFunctions.parseSeasonResults(
     jsonData, pageManager.startDate, pageManager.endDate
   );
+  console.log(sortedDrivers)
   const raceLabels = utils.getRaceLabels(sortedDrivers);
   // Update start/end date dropdowns.
   utils.createStartEndDropdown(jsonData, pageManager);

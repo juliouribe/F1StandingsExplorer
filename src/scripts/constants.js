@@ -36,11 +36,14 @@ export const grandPrixAbbreviations = {
   "Malaysian Grand Prix": "MAL",
   "European Grand Prix": "EUR",
   "Sakhir Grand Prix": "SKH",
+  "San Marino Grand Prix": "SMR",
+  "Korean Grand Prix": "KOR",
+  "Indian Grand Prix": "IND",
 }
 
 export const localFileSeasons = [2021, 2022];
 
-export const numberOfSeasons = 10;
+export const numberOfSeasons = 24;
 
 export const championship = {
   "drivers": "drivers",
