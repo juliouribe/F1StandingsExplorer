@@ -15,16 +15,16 @@ const seasonSelection = document.querySelector("#season");
 const championship = document.querySelector("#championship");
 
 const changeSeasonRefresh = e => {
-  let season = document.getElementById("season").value
+  pageManager.season = document.getElementById("season").value
   pageManager.championshipToggle(document.querySelector('#constructor').checked)
   // When you change season don't pass in start/end date.
-  populatePage(season, "", "");
+  populatePage("", "");
 }
 
 const repopulatePage = e => {
   // This can be triggered but the submit action.
   e.preventDefault();
-  let season = document.getElementById("season").value
+  pageManager.season = document.getElementById("season").value
   let inputStartDate = document.getElementById("start-date").value;
   let inputEndDate = document.getElementById("end-date").value;
   pageManager.championshipToggle(document.querySelector('#constructor').checked)
@@ -35,17 +35,17 @@ const repopulatePage = e => {
   // } else {
   // }
   // perhaps save what the last submitted dates were in case we jump to driver view
-  populatePage(season, inputStartDate, inputEndDate);
+  populatePage(inputStartDate, inputEndDate);
 }
 
 const championshipToggle = e => {
-  let season = document.getElementById("season").value
+  pageManager.season = document.getElementById("season").value
   pageManager.championshipToggle(document.querySelector('#constructor').checked)
-  populatePage(season, "", "");
+  populatePage("", "");
 }
 
 const handleDriverClick = (e, legendItem, _) => {
-  let season = document.getElementById("season").value
+  pageManager.season = document.getElementById("season").value
   let inputStartDate = document.getElementById("start-date").value;
   let inputEndDate = document.getElementById("end-date").value;
   if (inputStartDate === inputEndDate) {
@@ -54,35 +54,35 @@ const handleDriverClick = (e, legendItem, _) => {
   }
   driverNum = legendItem.datasetIndex;
   driverView = true;
-  populatePage(season, inputStartDate, inputEndDate, driverNum);
+  populatePage(inputStartDate, inputEndDate, driverNum);
 }
 
 const backToMain = e => {
   driverView = false;
   driverNum = null;
-  let season = document.getElementById("season").value
+  pageManager.season = document.getElementById("season").value
   let inputStartDate = document.getElementById("start-date").value;
   let inputEndDate = document.getElementById("end-date").value;
   if (inputStartDate === inputEndDate) {
     inputStartDate = "";
     inputEndDate = "";
   }
-  populatePage(season, inputStartDate, inputEndDate);
+  populatePage(inputStartDate, inputEndDate);
 }
 
-async function populatePage(season = 2021, startDate = "", endDate = "", driverDetail = null) {
+async function populatePage(startDate = "", endDate = "", driverDetail = null) {
   // Load and parse race data from local file or API.
-  let jsonData = JSON.parse(localStorage.getItem(season));
+  let jsonData = JSON.parse(localStorage.getItem(pageManager.season));
   // If we're not using cached data, get from local file or fetching from API.
   if (jsonData === null) {
-    if (constants.localFileSeasons.includes(parseInt(season))) {
+    if (constants.localFileSeasons.includes(parseInt(pageManager.season))) {
       console.log("Loading local file");
-      jsonData = await parsingFunctions.loadResultsJson(season);
+      jsonData = await parsingFunctions.loadResultsJson(pageManager.season);
     } else {
       console.log("Querying API");
-      jsonData = await parsingFunctions.fetchSeasonResults(season);
+      jsonData = await parsingFunctions.fetchSeasonResults(pageManager.season);
     }
-    localStorage.setItem(season, JSON.stringify(jsonData));
+    localStorage.setItem(pageManager.season, JSON.stringify(jsonData));
   } else {
     console.log("Found data in local storage");
   }
@@ -101,9 +101,9 @@ async function populatePage(season = 2021, startDate = "", endDate = "", driverD
     const singleDriver = [sortedDrivers[driverDetail]];
     StateManager.currentChart = chartFunctions.renderDriverDetail(singleDriver, raceLabels, ctx, backToMain)
   } else if (pageManager.championship === constants.championship.constructors) {
-    StateManager.currentChart = chartFunctions.renderConstructorsTable(jsonData, startDate, endDate, season, raceLabels, ctx);
+    StateManager.currentChart = chartFunctions.renderConstructorsTable(jsonData, startDate, endDate, pageManager.season, raceLabels, ctx);
   } else {
-    StateManager.currentChart = chartFunctions.renderDriversTable(sortedDrivers, season, raceLabels, ctx, handleDriverClick);
+    StateManager.currentChart = chartFunctions.renderDriversTable(sortedDrivers, pageManager.season, raceLabels, ctx, handleDriverClick);
   }
   // Create Positions Table
   const table = tableFunctions.generateTable(sortedDrivers, raceLabels);
