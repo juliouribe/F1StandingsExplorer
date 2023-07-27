@@ -16,8 +16,12 @@ footer p {
 }
 
 footer a {
-  color: red;
+  color: white;
   text-decoration: none;
+}
+
+.footer-left {
+  width: 400px;
 }
 
 .footer-right {
@@ -28,8 +32,8 @@ footer a {
 .footer-right li {
   margin: 3px 0px;
   font-family: sans-serif;
-}
-
-.footer-left {
-  width: 400px;
+  text-align: left;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
