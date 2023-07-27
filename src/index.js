@@ -99,11 +99,14 @@ async function populatePage(driverDetail = null) {
   const ctx = utils.handleCanvas(StateManager.currentChart);
   if (driverDetail != null) {
     const singleDriver = [sortedDrivers[driverDetail]];
-    StateManager.currentChart = chartFunctions.renderDriverDetail(singleDriver, raceLabels, ctx, backToMain)
+    StateManager.currentChart = chartFunctions.renderDriverDetail(
+      singleDriver, raceLabels, ctx, backToMain)
   } else if (pageManager.championship === constants.championship.constructors) {
-    StateManager.currentChart = chartFunctions.renderConstructorsTable(jsonData, pageManager.startDate, pageManager.endDate, pageManager.season, raceLabels, ctx);
+    StateManager.currentChart = chartFunctions.renderConstructorsTable(
+      jsonData, pageManager, raceLabels, ctx);
   } else {
-    StateManager.currentChart = chartFunctions.renderDriversTable(sortedDrivers, pageManager.season, raceLabels, ctx, handleDriverClick);
+    StateManager.currentChart = chartFunctions.renderDriversTable(
+      sortedDrivers, pageManager, raceLabels, ctx, handleDriverClick);
   }
   // Create Positions Table
   const table = tableFunctions.generateTable(sortedDrivers, raceLabels);
