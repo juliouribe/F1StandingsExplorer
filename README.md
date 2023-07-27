@@ -1,71 +1,50 @@
 # F1 Standings Explorer
+![img](./assets/samples/project-banner.png "Project Banner")
+F1 Standings Explorer is a single page application for exploring Formula 1 seasons results. When F1 fans look up the season standings online, they usually find a simple table with the current total. F1 Standings offers new F1 fans and long time fans the option to explore season standings of the current season and previous seasons via data visualizations and interactive graphs and tables. How close was the WDC championship halfway through the year in 2021? How often did Charles not win a race when he got pole in 2022? Who was leading the constructor's championship in 2020? All of those questions can be answered with graphs using the F1 Standings Explorer web app.
 
-## Overview
+[F1 Standings Explorer Live Site](http://juliouribe.github.io/F1StandingsExplorer/)
 
-I would like to make an F1 Standings Explorer web page. Most standings results for F1 are simple points totals that don’t really convey how a season played out. I would like to make a line graph for a given year to show how each driver accumulated points. If you don't know how F1 points are accumulated, I have a short summary below.
+## Technologies Used
+F1 Standings Explorer is a fully functional web app built using JavaScript, HTML, and CSS. I used [Chart.JS](https://www.chartjs.org/) for plots and [Ergast API](https://ergast.com/mrd/) for data.
 
-I want to make the webpage interactive by letting users click and explore results further. Users will be able to click into a driver and get more detailed results for that year. The driver detail view will show qualifying and finish race position for each race. I would also like to have a race detail view to show driver position changes lap by lap. These interactive graphs are a great example of using JavaScript and an API to create interactive data visualizations.
+# Features
+## Driver's Championship Graphs
+F1 Standings Explorer creates visualizations that show how an F1 season played out. Two plots are generated for the Driver's championship. The first is a line graph showing the points total for each driver. Data is rendered by parsing json data pulled from the F1 API. The web app uses caching so repeated pulls and filtering are quick.
 
-### How the F1 Championship Works
-There are 10 teams and 20 drivers, two drivers per team, that participate in about 20 races per season. Each race, the top 10 positions are awarded points, with the 25 points going to the winner and the 10th place driver getting a single point. The driver with the most points at the end of the season wins the World Driver's Championship. The team with the most points, combining both drivers, wins the World Constructors's Championship.
+![img](./assets/samples/WDC-2021.png "WDC 2021")
 
-Over the course of a weekend drivers participate in Friday practice, Saturday Qualifying, and Sunday race. Qualifying doesn't give points but it determines where you start on race day. Fans place a lot of emphasis on how well drivers qualify but the race finish is where points are awarded. Both are important and tell their own story.
+A driver's position table summary is also generated. This data is rendered from the same data that renders the line-graphs and is updated when a user filters data.
 
-### Race Finish Points Breakdown
-| Position | Points |
-| - | - |
-| 1st | 25 |
-| 2nd | 18 |
-| 3rd | 15 |
-| 4th | 12 |
-| 5th | 10 |
-| 6th | 8 |
-| 7th | 6 |
-| 8th | 4 |
-| 9th | 2 |
-| 10th | 1 |
+![img](./assets/samples/positions-table.png "Positions Table 2021")
 
-## Functionality and Features
-F1 Standings Explorer will provide interactive data visualizations for users to explore and get a high level overview of how a F1 season played out.
+## Data Filtering Options
+### Summary
+F1 Standings Explorer provides users the option to select different seasons of F1 and filter for date ranges. You also have the option to toggle between the World Driver's Championship or the World Constructor's Championship. Date is updated and plots are regenerated using the filtered data. In the example below we can see how large Charles Leclerc's lead was after Miami in 2022. Max Verstappen was making a huge surge and we can see how the championship was tightening.
 
-### Main Page: Season Summary
-The main page will be a line graph to summarize points earned over the course of the season per driver. It will have the option select different years, filter drivers, filter teams, give a start date and end date to adjust the x-axis, and toggle between the Driver's Championship and the Constructor's Championship.
+![img](./assets/samples/filtering.png "Example Filtering")
 
-The x-axis represents the results from a given race. The y-axis represents the points total and each driver will be a different color respective to team colors. For example, Ferrari's Charles Leclerc will be red like his team and the second driver will be a lighter shade of red. Each team has generally distinct colors. If the graph is crowded users can filter out drivers or teams.
 
-### Driver Detail View: Season Summary with Qualifying Results and Race Finish
-Users will be able to click on a driver from the main page to pull up a more in depth view for just that driver. This graph will show qualifying results along with race finish for each race. This view is useful for seeing if a driver typically finishes where they qualify. Some drivers drop down the order while others climb up the field.
+## Constructor's Championship
+Users can toggle to see the Constructor's Championship. The linegraphs update so we can view how each team performed through the year. User's can filter for date ranges and select different seasons just like the WDC graphs. In the example below, we can see how neck and neck Mercedes and Redbull were all year with Mercedes ultimately taking the WCC trophy.
+![img](./assets/samples/WCC-2021.png "WCC 2021")
 
-The x-axis still represents each race but I'll have two bar charts per race to show where they qualified and where they finished. The y-axis still represents the points total over the course of the season. I'll add a line graph on top of the bar chart.
+## Driver Detail View
+While on the Driver's Champion view, users can click on an individual driver to pull up their qualifying results and race finish results for each race. A bar chart is generated showing the results for each race. In the example below we can look at Sergio Perez who is under a lot of scrutiny in 2023 for having poor qualifying results. The bar charts however show he's doing a great job recovering positions on race day. For example, in Austria Checo started in 15th but by the end of the race he made it onto the podium getting 3rd.
 
-### (BONUS) Race Detail View: Lap by Lap Positions Summary
-Users will be able to click on a given race from the main page to pull up a more detailed view of a given race. It will provide a summary of grid positions over the course of the race, lap by lap.
+![img](./assets/samples/checo-detail.png "Checo Detail View")
 
-The x-axis will represent the laps for the specific race. The y-axis will represent the grid positions in a static manner. First will be at the top, then second, all the way down to 20th. The line graphs will follow a driver as they move up and down positions over the course of the race. Pit stops and drivers overtaking will be visible on this graph as positions shift.
+# Challenges
+## Managing State
+There are a lot of options for what will get rendered, when to filter, what defaults to use, etc. I came up with a pretty nice solution so things don't reset or get lost unexpectedly when interacting with the filters. I used a class called StateManager which acts very similarly to a Singleton. There is only one instance of this class and it gets accessed across the code base so we have consistent filter values across the entire application. It also have a few methods to dry up code and carefully handle changing values.
 
-## Mock Up
-[Figma Link](https://www.figma.com/file/DlCbUDeggzNDlML5IATI4F/F1StandingsExplorer?type=design&node-id=0-1&mode=design&t=IND9IRyf0LvhB480-0)
-### Season Summary Main Page
-![Season Summary](./assets/season-sumary.png "Season Summary")
+![img](./assets/samples/state-manager.png "State Manager")
 
-### Driver Detail View
-![Driver Detail View](./assets/driver-detail.png "Driver Detail View")
+## Caching and loading data
+F1 Standings Explorer parses a lot of data which can potentially cause a lot of down times for users. For each season of Forumla 1 we are querying and parsing hundreds of races results. To solve this, I used two local data files so the default select season renders almost instantly. If we choose seasons that are not available locally, we query the Ergast API. The first time rendering is slow but future API calls are cached so they load instantly. I used Javascript's localStorage to track which seasons have already been queried and are available.
 
-### Race Detail View
-![Race Detail View](./assets/race-detail.png "Race Detail View")
+![img](./assets/samples/caching.png "Loading, fetching, and caching")
 
-## Technologies, Libraries, APIs
-I will be getting data from [Ergast API](https://ergast.com/mrd/). The guidelines for using this API include no more than 4 requests per second (avoid spam) or 200 times per hour. A unique API key is not required.
+## Parsing JSON data and generating dynamic graphs
+One challenge was coming up with efficient code that parses the json data returned from the API into meaningful summaries but is also compatible with populating two types of graphs. I came up with good parsing algorithms to parse hundreds of race results and group them by driver, tally points totals, and order them by position in the championship. I made these functions modular so we can apply dynamic filters and still return accurate totals.
 
-I will most likely be using [Chart.JS](https://www.chartjs.org/) for data visualizations. I only really need bar charts, and line charts. Might look for some nice style options or potential animations.
-
-To avoid spamming the API too much I may download some of the data from the F1 API and keep it in a local file. I plan to "cache" queries by saving to JavaScript local storage.
-
-## Implementation Timeline
-| Date | Goal |
-| - | - |
-| Friday Afternoon | Build layout, basic season summary plot for a single year, use local data file, and basic styling |
-| Monday | Create Season Summary Main Page Plot with filters and interactive buttons |
-| Tuesday | Finish Driver Detail View and complete 70% of all styling |
-| Wednesday | Finish Race Detail View and 95% of all styling |
-| Thursday Morning | Verify functionality and optimize queries where possible |
+See "/src/scripts/parsing-functions.js" for well documented parsing code.
