@@ -44,7 +44,6 @@ const repopulatePage = e => {
 const championshipToggle = e => {
   pageManager.season = document.getElementById("season").value
   pageManager.championshipToggle(document.querySelector('#constructor').checked)
-  pageManager.processDateRange("", "")
   populatePage();
 }
 
@@ -54,14 +53,13 @@ const handleDriverClick = (e, legendItem, _) => {
     document.getElementById("start-date").value,
     document.getElementById("end-date").value
   )
-  driverNum = legendItem.datasetIndex;
-  driverView = true;
-  populatePage(driverNum);
+  pageManager.driverNum = legendItem.datasetIndex;
+  pageManager.driverView = true;
+  populatePage();
 }
 
 const backToMain = e => {
-  driverView = false;
-  driverNum = null;
+  pageManager.clearDriverView();
   pageManager.season = document.getElementById("season").value
   pageManager.processDateRange(
     document.getElementById("start-date").value,
@@ -70,7 +68,7 @@ const backToMain = e => {
   populatePage();
 }
 
-async function populatePage(driverDetail = null) {
+async function populatePage() {
   // Load and parse race data from local file or API.
   let jsonData = JSON.parse(localStorage.getItem(pageManager.season));
   // If we're not using cached data, get from local file or fetching from API.
@@ -97,8 +95,9 @@ async function populatePage(driverDetail = null) {
 
   // Render chart depending on which options are enabled.
   const ctx = utils.handleCanvas(StateManager.currentChart);
-  if (driverDetail != null) {
-    const singleDriver = [sortedDrivers[driverDetail]];
+  if (pageManager.driverView) {
+    // const singleDriver = [sortedDrivers[driverDetail]];
+    const singleDriver = pageManager.findDriver(sortedDrivers);
     StateManager.currentChart = chartFunctions.renderDriverDetail(
       singleDriver, raceLabels, ctx, backToMain)
   } else if (pageManager.championship === constants.championship.constructors) {

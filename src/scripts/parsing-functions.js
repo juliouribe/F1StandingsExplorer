@@ -119,8 +119,8 @@ export function generateConstructorDataset(sortedConstructors) {
 
 export function generateSingleDriverData(singleDriver) {
   // Generate chart data for the Driver Detail view.
-  const driverName = singleDriver[0][0];
-  let driverData = Object.values(singleDriver[0][1])
+  const driverName = singleDriver[0];
+  let driverData = Object.values(singleDriver[1])
   driverData = driverData.slice(0, driverData.length - 1)
   const qualiDataset = {
     label: "Qualifying",
