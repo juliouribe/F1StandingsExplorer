@@ -3,7 +3,7 @@ import * as constants from './constants';
 import * as utils from './utils';
 
 export async function fetchSeasonResults(season = 2021) {
-  const url = `http://ergast.com/api/f1/${season}/results.json?limit=500`
+  const url = `https://ergast.com/api/f1/${season}/results.json?limit=500`
   let result;
   try {
     const response = await fetch(

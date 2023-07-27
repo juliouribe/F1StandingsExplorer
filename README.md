@@ -55,7 +55,7 @@ The x-axis will represent the laps for the specific race. The y-axis will repres
 ![Race Detail View](./assets/race-detail.png "Race Detail View")
 
 ## Technologies, Libraries, APIs
-I will be getting data from [Ergast API](http://ergast.com/mrd/). The guidelines for using this API include no more than 4 requests per second (avoid spam) or 200 times per hour. A unique API key is not required.
+I will be getting data from [Ergast API](https://ergast.com/mrd/). The guidelines for using this API include no more than 4 requests per second (avoid spam) or 200 times per hour. A unique API key is not required.
 
 I will most likely be using [Chart.JS](https://www.chartjs.org/) for data visualizations. I only really need bar charts, and line charts. Might look for some nice style options or potential animations.
 
