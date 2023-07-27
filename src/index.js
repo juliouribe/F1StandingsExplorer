@@ -10,6 +10,7 @@ const pageManager = new StateManager();
 const filtersForm = document.querySelector(".data-filters");
 const seasonSelection = document.querySelector("#season");
 const championship = document.querySelector("#championship");
+const instructionsMenu = document.querySelector("#instructions-menu");
 
 // Event Handlers.
 const tableRefresh = e => {
@@ -55,6 +56,17 @@ const backToMain = e => {
   populatePage();
 }
 
+const toggleShow = e => {
+  // Toggles whether or not the instructions are hidden.
+  const instructionsList = document.getElementById("instructions-list")
+  if (instructionsList.style.display === "none") {
+    instructionsList.style.display = "block";
+  } else {
+    instructionsList.style.display = "none";
+  }
+}
+
+// Main page population function.
 async function populatePage() {
   // Load and parse race data from local file or API.
   let jsonData = JSON.parse(localStorage.getItem(pageManager.season));
@@ -104,6 +116,7 @@ async function populatePage() {
 filtersForm.addEventListener("submit", repopulatePage);
 seasonSelection.addEventListener("change", tableRefresh);
 championship.addEventListener("change", tableRefresh);
+instructionsMenu.addEventListener("click", toggleShow)
 
 // Run initial populate page with defaults: season 2021, driver's championship.
 populatePage();
