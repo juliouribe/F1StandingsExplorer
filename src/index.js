@@ -25,8 +25,11 @@ const repopulatePage = e => {
   // This can be triggered but the submit action.
   e.preventDefault();
   pageManager.season = document.getElementById("season").value
-  let inputStartDate = document.getElementById("start-date").value;
-  let inputEndDate = document.getElementById("end-date").value;
+  pageManager.processDateRange(
+    document.getElementById("start-date").value,
+    document.getElementById("end-date").value,
+    true
+  )
   pageManager.championshipToggle(document.querySelector('#constructor').checked)
   // Driver num is not enough. Order of drivers changes depending on how you filter
   // Figure out a way to pass the driver name or something and filter on that.
@@ -35,42 +38,39 @@ const repopulatePage = e => {
   // } else {
   // }
   // perhaps save what the last submitted dates were in case we jump to driver view
-  populatePage(inputStartDate, inputEndDate);
+  populatePage();
 }
 
 const championshipToggle = e => {
   pageManager.season = document.getElementById("season").value
   pageManager.championshipToggle(document.querySelector('#constructor').checked)
-  populatePage("", "");
+  pageManager.processDateRange("", "")
+  populatePage();
 }
 
 const handleDriverClick = (e, legendItem, _) => {
   pageManager.season = document.getElementById("season").value
-  let inputStartDate = document.getElementById("start-date").value;
-  let inputEndDate = document.getElementById("end-date").value;
-  if (inputStartDate === inputEndDate) {
-    inputStartDate = "";
-    inputEndDate = "";
-  }
+  pageManager.processDateRange(
+    document.getElementById("start-date").value,
+    document.getElementById("end-date").value
+  )
   driverNum = legendItem.datasetIndex;
   driverView = true;
-  populatePage(inputStartDate, inputEndDate, driverNum);
+  populatePage(driverNum);
 }
 
 const backToMain = e => {
   driverView = false;
   driverNum = null;
   pageManager.season = document.getElementById("season").value
-  let inputStartDate = document.getElementById("start-date").value;
-  let inputEndDate = document.getElementById("end-date").value;
-  if (inputStartDate === inputEndDate) {
-    inputStartDate = "";
-    inputEndDate = "";
-  }
-  populatePage(inputStartDate, inputEndDate);
+  pageManager.processDateRange(
+    document.getElementById("start-date").value,
+    document.getElementById("end-date").value
+  )
+  populatePage();
 }
 
-async function populatePage(startDate = "", endDate = "", driverDetail = null) {
+async function populatePage(driverDetail = null) {
   // Load and parse race data from local file or API.
   let jsonData = JSON.parse(localStorage.getItem(pageManager.season));
   // If we're not using cached data, get from local file or fetching from API.
@@ -88,12 +88,12 @@ async function populatePage(startDate = "", endDate = "", driverDetail = null) {
   }
   // Organize data into drivers from highest to lowest points.
   const sortedDrivers = parsingFunctions.parseSeasonResults(
-    jsonData, startDate, endDate
+    jsonData, pageManager.startDate, pageManager.endDate
   );
   const raceLabels = utils.getRaceLabels(sortedDrivers);
   console.log(sortedDrivers)
   // Update start/end date dropdowns.
-  utils.createStartEndDropdown(jsonData);
+  utils.createStartEndDropdown(jsonData, pageManager);
 
   // Render chart depending on which options are enabled.
   const ctx = utils.handleCanvas(StateManager.currentChart);
@@ -101,7 +101,7 @@ async function populatePage(startDate = "", endDate = "", driverDetail = null) {
     const singleDriver = [sortedDrivers[driverDetail]];
     StateManager.currentChart = chartFunctions.renderDriverDetail(singleDriver, raceLabels, ctx, backToMain)
   } else if (pageManager.championship === constants.championship.constructors) {
-    StateManager.currentChart = chartFunctions.renderConstructorsTable(jsonData, startDate, endDate, pageManager.season, raceLabels, ctx);
+    StateManager.currentChart = chartFunctions.renderConstructorsTable(jsonData, pageManager.startDate, pageManager.endDate, pageManager.season, raceLabels, ctx);
   } else {
     StateManager.currentChart = chartFunctions.renderDriversTable(sortedDrivers, pageManager.season, raceLabels, ctx, handleDriverClick);
   }

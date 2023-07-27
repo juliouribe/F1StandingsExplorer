@@ -18,4 +18,14 @@ export class StateManager {
       this.championship = constants.championship.drivers;
     };
   }
+
+  processDateRange(start, end, matchingOkay=false) {
+    this.startDate = start;
+    this.endDate = end;
+    // If the start and end are the same, reset to empty strings.
+    if (this.startDate === this.endDate && !matchingOkay) {
+      this.startDate = "";
+      this.endDate = "";
+    }
+  }
 }

@@ -1,6 +1,6 @@
 import * as constants from './constants';
 
-export function handleCanvas(chart=null) {
+export function handleCanvas(chart = null) {
   // Gets canvas and returns the context. Destroys chart if populated.
   const canvas = document.getElementById("graph-canvas")
   if (chart) chart.destroy()
@@ -43,7 +43,7 @@ export function removeAllChildren(elementId) {
   return parentElement;
 }
 
-export function createStartEndDropdown(response) {
+export function createStartEndDropdown(response, pageManager) {
   // Generates dropdown options for the start and end date filters.
   const startDate = removeAllChildren("start-date");
   const endDate = removeAllChildren("end-date");
@@ -53,8 +53,15 @@ export function createStartEndDropdown(response) {
     const optionText = `${shortName} - ${race.date}`;
     const startOption = populateElement("option", optionText, startDate);
     startOption.setAttribute("value", race.date);
+    // If statements preserve previously selected option when refreshing.
+    if (race.date === pageManager.startDate) {
+      startOption.setAttribute("selected", true)
+    }
     const endOption = populateElement("option", optionText, endDate);
     endOption.setAttribute("value", race.date);
+    if (race.date === pageManager.endDate) {
+      endOption.setAttribute("selected", true)
+    }
   })
 }
 
