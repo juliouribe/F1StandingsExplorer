@@ -73,22 +73,17 @@ async function populatePage() {
   // If we're not using cached data, get from local file or fetching from API.
   if (jsonData === null) {
     if (constants.localFileSeasons.includes(parseInt(pageManager.season))) {
-      console.log("Loading local file");
       jsonData = await parsingFunctions.loadResultsJson(pageManager.season);
     } else {
-      console.log("Querying API");
       jsonData = await parsingFunctions.fetchSeasonResults(pageManager.season);
     }
     localStorage.setItem(pageManager.season, JSON.stringify(jsonData));
-  } else {
-    console.log("Found data in local storage");
   }
   // Organize data into drivers from highest to lowest points.
   const sortedDrivers = parsingFunctions.parseSeasonResults(
     jsonData, pageManager.startDate, pageManager.endDate
   );
   const raceLabels = utils.getRaceLabels(sortedDrivers);
-  console.log(sortedDrivers)
   // Update start/end date dropdowns.
   utils.createStartEndDropdown(jsonData, pageManager);
   // Render chart depending on which options are enabled.
