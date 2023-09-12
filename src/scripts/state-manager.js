@@ -21,6 +21,10 @@ export class StateManager {
   }
 
   processDateRange(start, end, matchingOkay = false) {
+    if (start > end) {
+      alert("Start date must be before end date.");
+      return false;
+    }
     this.startDate = start;
     this.endDate = end;
     // If the start and end are the same, reset to empty strings.
@@ -28,6 +32,7 @@ export class StateManager {
       this.startDate = "";
       this.endDate = "";
     }
+    return true;
   }
   findDriver(sortedDrivers) {
     /* Look up driver data by index or driverName if we're already on the driver

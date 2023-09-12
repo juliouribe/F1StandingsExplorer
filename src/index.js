@@ -69,8 +69,8 @@ const toggleShow = e => {
 // Main page population function.
 async function populatePage() {
   // Load and parse race data from local file or API.
-  let jsonData = JSON.parse(localStorage.getItem(pageManager.season));
   // If we're not using cached data, get from local file or fetching from API.
+  let jsonData = JSON.parse(localStorage.getItem(pageManager.season));
   if (jsonData === null) {
     if (constants.localFileSeasons.includes(parseInt(pageManager.season))) {
       jsonData = await parsingFunctions.loadResultsJson(pageManager.season);
@@ -83,14 +83,11 @@ async function populatePage() {
   const sortedDrivers = parsingFunctions.parseSeasonResults(
     jsonData, pageManager.startDate, pageManager.endDate
   );
-  console.log(sortedDrivers)
   const raceLabels = utils.getRaceLabels(sortedDrivers);
-  // Update start/end date dropdowns.
   utils.createStartEndDropdown(jsonData, pageManager);
   // Render chart depending on which options are enabled.
   const ctx = utils.handleCanvas(StateManager.currentChart);
   if (pageManager.driverView) {
-    // const singleDriver = [sortedDrivers[driverDetail]];
     const singleDriver = pageManager.findDriver(sortedDrivers);
     StateManager.currentChart = chartFunctions.renderDriverDetail(
       singleDriver, raceLabels, ctx, backToMain)
