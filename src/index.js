@@ -69,15 +69,22 @@ const toggleShow = e => {
 // Main page population function.
 async function populatePage() {
   // Load and parse race data from local file or API.
-  // If we're not using cached data, get from local file or fetching from API.
-  let jsonData = JSON.parse(localStorage.getItem(pageManager.season));
+  let jsonData;
+  if (pageManager.season !== 2023) {
+    jsonData = await JSON.parse(localStorage.getItem(pageManager.season));
+  }
+  // If we're not using cached data, load data from local file or fetch from the API.
   if (jsonData === null) {
     if (constants.localFileSeasons.includes(parseInt(pageManager.season))) {
+      console.log("Loading from local file.")
       jsonData = await parsingFunctions.loadResultsJson(pageManager.season);
     } else {
+      console.log("Fetching from API.")
       jsonData = await parsingFunctions.fetchSeasonResults(pageManager.season);
     }
-    localStorage.setItem(pageManager.season, JSON.stringify(jsonData));
+    if (pageManager.season !== 2023) {
+      localStorage.setItem(pageManager.season, JSON.stringify(jsonData));
+    }
   }
   // Organize data into drivers from highest to lowest points.
   const sortedDrivers = parsingFunctions.parseSeasonResults(
