@@ -5,7 +5,7 @@
   background: ghostwhite;
   border: black solid 1px;
   left: 92%;
-  top: -43px;
+  top: -2%;
   padding: 3px;
   border-radius: 5px;
 }
@@ -18,7 +18,7 @@
 
 #instructions>h2 {
   font-family: sans-serif;
-  font-size: 24px;
+  font-size: 20px;
   padding: 3px;
   text-align: left;
 }

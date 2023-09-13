@@ -19,6 +19,7 @@
   padding: 20px;
   border: 1px solid #888;
   width: 80%;
+  border-radius: 5px;
 }
 
 /* Close Button */
@@ -34,4 +35,42 @@
   color: black;
   text-decoration: none;
   cursor: pointer;
+}
+
+#explainer-button {
+  position: absolute;
+  min-width: 200px;
+  background: ghostwhite;
+  border: black solid 1px;
+  left: 92%;
+  top: -10%;
+  padding: 3px;
+  border-radius: 5px;
+}
+
+#explainer-button h2 {
+  font-family: sans-serif;
+  font-size: 20px;
+  padding: 3px;
+  text-align: left;
+}
+
+#explainer-button h2:hover {
+  cursor: pointer;
+  background-color: lightgray;
+  border-radius: 5px;
+}
+
+.modal-content h1 {
+  font-family: sans-serif;
+  font-size: 24px;
+  padding: 3px;
+  text-align: left;
+}
+
+.modal-content p {
+  font-family: sans-serif;
+  font-size: 16px;
+  padding: 3px;
+  text-align: left;
 }
