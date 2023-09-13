@@ -11,6 +11,12 @@ const filtersForm = document.querySelector(".data-filters");
 const seasonSelection = document.querySelector("#season");
 const championship = document.querySelector("#championship");
 const instructionsMenu = document.querySelector("#instructions-menu");
+const explainerButton = document.getElementById("explainer-button");
+const explainerModal = document.getElementById("explainer-modal");
+const explainerClose = document.getElementById("explainer-close");
+// const modal = document.getElementById('myModal');
+// Get the <span> element that closes the modal
+const span = document.getElementsByClassName("close")[0];
 
 // Event Handlers.
 const tableRefresh = e => {
@@ -110,6 +116,21 @@ async function populatePage() {
   const pointsTable = document.querySelector(".table-container");
   pointsTable.childNodes.forEach(child => child.remove())
   pointsTable.appendChild(table);
+}
+
+// // Logic to open and close the explainer modal.
+explainerButton.onclick = function () {
+  explainerModal.style.display = "block";
+}
+
+// When the user clicks on <span> (x) or outside of the modal, close the modal
+explainerClose.onclick = function () {
+  explainerModal.style.display = "none";
+}
+window.onclick = function (event) {
+  if (event.target == explainerModal) {
+    explainerModal.style.display = "none";
+  }
 }
 
 // Event Listeners

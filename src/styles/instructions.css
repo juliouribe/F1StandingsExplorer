@@ -8,7 +8,6 @@
   top: -43px;
   padding: 3px;
   border-radius: 5px;
-
 }
 
 #instructions>ul>li {
@@ -41,4 +40,5 @@
 #instructions-menu:hover {
   cursor: pointer;
   background-color: lightgray;
+  border-radius: 5px;
 }
