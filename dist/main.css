@@ -217,7 +217,7 @@ input:checked + .slider:before {
 .modal {
   display: none;
   position: fixed;
-  z-index: 10;
+  z-index: 1;
   left: 0;
   top: 0;
   width: 100%;
@@ -230,7 +230,7 @@ input:checked + .slider:before {
 /* Modal Content */
 .modal-content {
   background-color: #fefefe;
-  margin: 15% auto;
+  margin: 5% auto;
   padding: 20px;
   border: 1px solid #888;
   width: 80%;
@@ -288,6 +288,7 @@ input:checked + .slider:before {
   font-size: 16px;
   padding: 3px;
   text-align: left;
+  line-height: 1.25;
 }
 
 body {
