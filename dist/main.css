@@ -414,3 +414,12 @@ footer a {
   align-items: center;
   justify-content: center;
 }
+
+.footer-right img {
+  width: 50px;
+  height: auto;
+}
+
+.footer-right .fa-github {
+  font-size: 50px;
+}
