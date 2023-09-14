@@ -14,9 +14,7 @@ const instructionsMenu = document.querySelector("#instructions-menu");
 const explainerButton = document.getElementById("explainer-button");
 const explainerModal = document.getElementById("explainer-modal");
 const explainerClose = document.getElementById("explainer-close");
-// const modal = document.getElementById('myModal');
-// Get the <span> element that closes the modal
-const span = document.getElementsByClassName("close")[0];
+const backToMainButton = document.getElementById("back-to-main");
 
 // Event Handlers.
 const tableRefresh = e => {
@@ -48,6 +46,7 @@ const handleDriverClick = (e, legendItem, _) => {
   )
   pageManager.driverNum = legendItem.datasetIndex;
   pageManager.driverView = true;
+  backToMainButton.style.display = "block";
   populatePage();
 }
 
@@ -59,6 +58,7 @@ const backToMain = e => {
     document.getElementById("start-date").value,
     document.getElementById("end-date").value
   )
+  backToMainButton.style.display = "none";
   populatePage();
 }
 
@@ -138,6 +138,7 @@ filtersForm.addEventListener("submit", repopulatePage);
 seasonSelection.addEventListener("change", tableRefresh);
 championship.addEventListener("change", tableRefresh);
 instructionsMenu.addEventListener("click", toggleShow)
+backToMainButton.addEventListener("click", backToMain);
 
 // Run initial populate page with defaults: season 2021, driver's championship.
 populatePage();
