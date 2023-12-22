@@ -39,6 +39,7 @@ export const grandPrixAbbreviations = {
   "San Marino Grand Prix": "SMR",
   "Korean Grand Prix": "KOR",
   "Indian Grand Prix": "IND",
+  "Las Vegas Grand Prix": "LVG",
 }
 
 export const localFileSeasons = [2021, 2022];
